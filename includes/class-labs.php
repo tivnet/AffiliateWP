@@ -7,6 +7,15 @@
 class Affiliate_WP_Labs {
 
 	/**
+	 * Customizer panel ID (if needed).
+	 *
+	 * @access private
+	 * @since  2.0.4
+	 * @var    string
+	 */
+	private $customizer_panel_id = 'affwp_labs';
+
+	/**
 	 * Registered labs features.
 	 *
 	 * @access private
@@ -22,13 +31,52 @@ class Affiliate_WP_Labs {
 	 * @since  2.0.4
 	 */
 	public function __construct() {
-//		if ( ! function_exists( 'affiliatewp_labs' ) ) {
-//			// Admin notice.
-//			return;
-//		}
+		add_action( 'customize_register', array( $this, 'customize_register' ), 50 );
+		add_action( 'after_setup_theme',  array( $this, 'load_files'         )     );
+		add_action( 'after_setup_theme',  array( $this, 'init_classes'       )     );
+	}
 
-		add_action( 'admin_init', array( $this, 'load_files' ) );
-		add_action( 'admin_init', array( $this, 'init_classes' ) );
+	/**
+	 * Retrieves the Customizer panel ID for use by Labs features.
+	 *
+	 * @access public
+	 * @since  2.0.4
+	 *
+	 * @return string Customizer panel ID.
+	 */
+	public function get_panel_id() {
+		return $this->customizer_panel_id;
+	}
+
+	/**
+	 * Fires Labs actions requiring the customizer.
+	 *
+	 * @access public
+	 * @since  2.0.4
+	 *
+	 * @param \WP_Customize_Manager $wp_customize Customizer instance.
+	 */
+	public function customize_register( $wp_customize ) {
+
+		/**
+		 * Fires on the core {@see 'customize_register'} action.
+		 *
+		 * @since 2.0.4
+		 *
+		 * @param \WP_Customize_Manager $wp_customize Customizer instance.
+		 */
+		do_action( 'affwp_labs_customize_register', $wp_customize );
+
+		// Only register the panel if a feature has added a section against it.
+		if ( has_action( 'affwp_labs_customize_register' ) ) {
+			$wp_customize->add_panel( $this->customizer_panel_id, array(
+				// Title deliberately not translatable.
+				'title'           => 'AffiliateWP',
+				'type'            => 'affwp_labs',
+				'active_callback' => '__return_true',
+				'description'     => '',
+			) );
+		}
 	}
 
 	/**
