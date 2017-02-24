@@ -44,7 +44,6 @@ class Affiliate_WP_Labs {
 
 		if ( ! empty( $files ) ) {
 			foreach ( $files as $file ) {
-				log_it( $file );
 				require_once( $file );
 			}
 		}
