@@ -19,7 +19,7 @@ class Affiliate_WP_Labs {
 	 * Registered labs features.
 	 *
 	 * @access private
-	 * @since  1.0
+	 * @since  2.0.4
 	 * @var    array
 	 */
 	private $features = array();
@@ -118,7 +118,7 @@ class Affiliate_WP_Labs {
 	 * Registers a new labs feature for the loader.
 	 *
 	 * @access public
-	 * @since  1.0
+	 * @since  2.0.4
 	 *
 	 * @param array $feature_args {
 	 *     Arguments for registering a new labs feature.
@@ -141,7 +141,7 @@ class Affiliate_WP_Labs {
 	 * Retrieves the list of registered features and their corresponding classes.
 	 *
 	 * @access public
-	 * @since  1.0
+	 * @since  2.0.4
 	 *
 	 * @return array Registered features.
 	 */
