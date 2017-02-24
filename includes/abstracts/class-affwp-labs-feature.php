@@ -19,5 +19,4 @@ abstract class Feature {
 	 */
 	abstract public function register_labs_setting( $settings );
 
-
 }
