@@ -24,7 +24,10 @@ class Affiliate_WP_Labs {
 	 * @since  2.0.4
 	 */
 	private function includes() {
+		// Bootstrap.
 		require_once AFFILIATEWP_PLUGIN_DIR . 'includes/abstracts/class-affwp-labs-feature.php';
+
+		// Features.
 		require_once AFFILIATEWP_PLUGIN_DIR . 'includes/labs/class-affiliate-area-styles.php';
 	}
 
