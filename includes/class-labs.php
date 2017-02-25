@@ -120,17 +120,17 @@ class Affiliate_WP_Labs {
 	 * @access public
 	 * @since  2.0.4
 	 *
-	 * @param array $feature_args {
+	 * @param string $feature_id   Uniuqe feature ID.
+	 * @param array  $feature_args {
 	 *     Arguments for registering a new labs feature.
 	 *
-	 *     @type string $id    Feature ID.
 	 *     @type string $class Feature class name.
 	 *     @type string $file  Feature class file path.
 	 * }
 	 */
-	public function register_feature( $feature_args ) {
-		if ( ! array_key_exists( $feature_args['id'], $this->get_features() ) ) {
-			$this->features[ $feature_args['id'] ] = array(
+	public function register_feature( $feature_id, $feature_args ) {
+		if ( ! array_key_exists( $feature_id, $this->get_features() ) ) {
+			$this->features[ $feature_id ] = array(
 				'class' => $feature_args['class'],
 				'file'  => $feature_args['file']
 			);
@@ -149,4 +149,17 @@ class Affiliate_WP_Labs {
 		return $this->features;
 	}
 
+	/**
+	 * Only intended for use by tests.
+	 *
+	 * @access public
+	 * @since  2.0.4
+	 */
+	public function _reset_features() {
+		if ( ! defined( 'WP_TESTS_DOMAIN' ) ) {
+			_doing_it_wrong( 'This method is only intended for use in phpunit tests', '2.0.4' );
+		} else {
+			$this->features = array();
+		}
+	}
 }
