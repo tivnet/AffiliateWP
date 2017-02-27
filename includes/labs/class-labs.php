@@ -25,12 +25,25 @@ class Affiliate_WP_Labs {
 	private $features = array();
 
 	/**
+	 * Labs features registry.
+	 *
+	 * @access public
+	 * @since  2.0.4
+	 * @var    \AffWP\Labs\Registry
+	 */
+	public $registry;
+
+	/**
 	 * Sets up the labs feature bootstrap and feature loader.
 	 *
 	 * @access public
 	 * @since  2.0.4
 	 */
 	public function __construct() {
+		require_once AFFILIATEWP_PLUGIN_DIR . 'includes/labs/class-affwp-labs-registry.php';
+
+		$this->registry = new \AffWP\Labs\Registry;
+
 		add_action( 'customize_register', array( $this, 'customize_register' ), 50 );
 		add_action( 'after_setup_theme',  array( $this, 'load_files'         )     );
 		add_action( 'after_setup_theme',  array( $this, 'init_classes'       )     );
@@ -88,7 +101,7 @@ class Affiliate_WP_Labs {
 	public function load_files() {
 		require_once AFFILIATEWP_PLUGIN_DIR . 'includes/abstracts/class-affwp-labs-feature.php';
 
-		$files = wp_list_pluck( $this->get_features(), 'file' );
+		$files = wp_list_pluck( $this->registry->get_features(), 'file' );
 
 		if ( ! empty( $files ) ) {
 			foreach ( $files as $file ) {
@@ -105,7 +118,7 @@ class Affiliate_WP_Labs {
 	 */
 	public function init_classes() {
 
-		$classes = wp_list_pluck( $this->get_features(), 'class' );
+		$classes = wp_list_pluck( $this->registry->get_features(), 'class' );
 
 		foreach ( $classes as $class ) {
 			if ( class_exists( $class ) ) {
@@ -114,52 +127,4 @@ class Affiliate_WP_Labs {
 		}
 	}
 
-	/**
-	 * Registers a new labs feature for the loader.
-	 *
-	 * @access public
-	 * @since  2.0.4
-	 *
-	 * @param string $feature_id   Uniuqe feature ID.
-	 * @param array  $feature_args {
-	 *     Arguments for registering a new labs feature.
-	 *
-	 *     @type string $class Feature class name.
-	 *     @type string $file  Feature class file path.
-	 * }
-	 */
-	public function register_feature( $feature_id, $feature_args ) {
-		if ( ! array_key_exists( $feature_id, $this->get_features() ) ) {
-			$this->features[ $feature_id ] = array(
-				'class' => $feature_args['class'],
-				'file'  => $feature_args['file']
-			);
-		}
-	}
-
-	/**
-	 * Retrieves the list of registered features and their corresponding classes.
-	 *
-	 * @access public
-	 * @since  2.0.4
-	 *
-	 * @return array Registered features.
-	 */
-	public function get_features() {
-		return $this->features;
-	}
-
-	/**
-	 * Only intended for use by tests.
-	 *
-	 * @access public
-	 * @since  2.0.4
-	 */
-	public function _reset_features() {
-		if ( ! defined( 'WP_TESTS_DOMAIN' ) ) {
-			_doing_it_wrong( 'This method is only intended for use in phpunit tests', '2.0.4' );
-		} else {
-			$this->features = array();
-		}
-	}
 }
