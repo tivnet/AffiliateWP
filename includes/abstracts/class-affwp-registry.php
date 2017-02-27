@@ -31,7 +31,7 @@ abstract class Registry {
 	/**
 	 * Adds an item to the registry.
 	 *
-	 * @access protected
+	 * @access public
 	 * @since  2.0.4
 	 *
 	 * @param int    $item_id   Item ID.
@@ -43,7 +43,7 @@ abstract class Registry {
 	 * }
 	 * @return true Always true.
 	 */
-	protected function add_item( $item_id, $attributes ) {
+	public function add_item( $item_id, $attributes ) {
 		foreach ( $attributes as $attribute => $value ) {
 			$this->items[ $item_id ][ $attribute ] = $value;
 		}
@@ -59,7 +59,7 @@ abstract class Registry {
 	 *
 	 * @param string $item_id Item ID.
 	 */
-	protected function remove_item( $item_id ) {
+	public function remove_item( $item_id ) {
 		unset( $this->items[ $item_id ] );
 	}
 
@@ -72,7 +72,7 @@ abstract class Registry {
 	 * @param string $item_id Item ID.
 	 * @return array|false Array of attributes for the item if registered, otherwise false.
 	 */
-	protected function get( $item_id ) {
+	public function get( $item_id ) {
 		if ( array_key_exists( $item_id, $this->items ) ) {
 			return $this->items[ $item_id ];
 		}
@@ -82,19 +82,19 @@ abstract class Registry {
 	/**
 	 * Retrieves registered items.
 	 *
-	 * @access protected
+	 * @access public
 	 * @since  2.0.4
 	 *
 	 * @return array The list of registered items.
 	 */
-	protected function get_items() {
+	public function get_items() {
 		return $this->items;
 	}
 
 	/**
 	 * Only intended for use by tests.
 	 *
-	 * @access protected
+	 * @access public
 	 * @since  2.0.4
 	 */
 	public function _reset_items() {
