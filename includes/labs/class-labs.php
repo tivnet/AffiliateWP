@@ -127,4 +127,19 @@ class Affiliate_WP_Labs {
 		}
 	}
 
+	/**
+	 * Helper to register a new feature.
+	 *
+	 * Defined at the Labs top-level for succinctness in external calls.
+	 *
+	 * @access public
+	 * @since  2.0.4
+	 *
+	 * @param string $feature_id Unique feature ID.
+	 * @param array  $attributes Feature attributes.
+	 * @return true Always true.
+	 */
+	public function register_feature( $feature_id, $attributes ) {
+		return $this->registry->register_feature( $feature_id, $attributes );
+	}
 }
