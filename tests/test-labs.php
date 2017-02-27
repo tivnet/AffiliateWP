@@ -31,7 +31,7 @@ class Tests extends UnitTestCase {
 	 * @access public
 	 */
 	public function tearDown() {
-		self::$labs->_reset_features();
+		self::$labs->registry->_reset_features();
 
 		parent::tearDown();
 	}
@@ -45,38 +45,14 @@ class Tests extends UnitTestCase {
 			'file'  => 'path/to/foobar.php'
 		) );
 
-		$this->assertArrayHasKey( 'foobar', self::$labs->get_features() );
-	}
-
-	/**
-	 * @covers \Affiliate_WP_Labs::register_feature()
-	 */
-	public function test_register_feature_should_not_allow_overwriting_features() {
-		// Add the initial feature.
-		self::$labs->register_feature( 'foobar', array(
-			'class' => 'Foo\Bar',
-			'file'  => 'path/to/foobar.php'
-		) );
-
-		// Confirm it was added.
-		$this->assertArrayHasKey( 'foobar', self::$labs->get_features() );
-
-		// Try to add it again.
-		self::$labs->register_feature( 'foobar', array(
-			'class' => 'Bar\Baz',
-			'file'  => 'path/to/foobar.php'
-		) );
-
-		// Confirm the class name is the same.
-		$features = self::$labs->get_features();
-		$this->assertSame( 'Foo\Bar', $features['foobar']['class'] );
+		$this->assertArrayHasKey( 'foobar', self::$labs->registry->get_features() );
 	}
 
 	/**
 	 * @covers \Affiliate_WP_Labs::get_features()
 	 */
 	public function test_get_features_should_be_empty_with_no_registered_features() {
-		$this->assertEqualSets( array(), self::$labs->get_features() );
+		$this->assertEqualSets( array(), self::$labs->registry->get_features() );
 	}
 
 	/**
@@ -97,6 +73,6 @@ class Tests extends UnitTestCase {
 		) );
 
 		// Confirm the feature is retrieved.
-		$this->assertEqualSets( $feature, self::$labs->get_features() );
+		$this->assertEqualSets( $feature, self::$labs->registry->get_features() );
 	}
 }
