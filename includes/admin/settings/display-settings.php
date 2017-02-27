@@ -34,6 +34,8 @@ function affwp_settings_admin() {
 			<form method="post" action="options.php">
 				<table class="form-table">
 				<?php
+				echo affwp_get_settings_tab_description( $active_tab );
+
 				settings_fields( 'affwp_settings' );
 				do_settings_fields( 'affwp_settings_' . $active_tab, 'affwp_settings_' . $active_tab );
 				?>
@@ -70,4 +72,31 @@ function affwp_get_settings_tabs() {
 	 * @param array $tabs Settings tabs.
 	 */
 	return apply_filters( 'affwp_settings_tabs', $tabs );
+}
+
+/**
+ * Retrieves description information for the given settings tab.
+ *
+ * @since 2.0.4
+ *
+ * @return string Settings tab description.
+ */
+function affwp_get_settings_tab_description( $tab ) {
+
+	switch( $tab ) {
+
+		case 'labs':
+
+			$description  = '<p>' . __( 'By choosing to enable Labs features, you agree to participate in anonymized usage data collection to help us further develop and improve features for AffiliateWP.', 'affiliate-wp' ) . '</p>';
+			$description .= '<p>' . __( 'Data collected will differ from feature to feature, but typically will include settings configuration, behavioral data around frequency and type of use, and other metrics. All data collected will be anonymized to protect your privacy.', 'affiliate-wp' ) . '</p>';
+
+			break;
+
+		default:
+
+			$description = '';
+			break;
+	}
+
+	return $description;
 }
