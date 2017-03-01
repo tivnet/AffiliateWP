@@ -79,6 +79,7 @@ function affwp_get_settings_tabs() {
  *
  * @since 2.0.4
  *
+ * @param string $tab Tab slug.
  * @return string Settings tab description.
  */
 function affwp_get_settings_tab_description( $tab ) {
