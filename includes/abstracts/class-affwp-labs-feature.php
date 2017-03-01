@@ -5,6 +5,7 @@ namespace AffWP\Labs;
  * Abstract base class for defining a Labs feature.
  *
  * @since 2.0.4
+ * @abstract
  */
 abstract class Feature {
 
