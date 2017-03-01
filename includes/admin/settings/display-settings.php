@@ -84,6 +84,10 @@ function affwp_get_settings_tabs() {
  */
 function affwp_get_settings_tab_description( $tab ) {
 
+	if ( ! array_key_exists( $tab, affwp_get_settings_tabs() ) ) {
+		return '';
+	}
+
 	switch( $tab ) {
 
 		case 'labs':
