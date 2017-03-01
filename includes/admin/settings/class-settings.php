@@ -767,6 +767,13 @@ class Affiliate_WP_Settings {
 					)
 				)
 			),
+			/**
+			 * Filters the default "Labs" settings.
+			 *
+			 * @since 2.0.4
+			 *
+			 * @param array $settings Array of labs settings.
+			 */
 			'labs' => apply_filters( 'affwp_settings_labs', array() ),
 		);
 
