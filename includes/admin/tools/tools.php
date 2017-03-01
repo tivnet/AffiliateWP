@@ -445,17 +445,15 @@ add_action( 'admin_init', 'affwp_tools_sysinfo_download' );
  * @return      void
  */
 function affwp_debug_tab() {
-
-	$logs = new Affiliate_WP_Logging;
-?>
+	?>
 	<div id="affwp-dashboard-widgets-wrap">
 		<div class="metabox-holder">
 			<div class="postbox">
 				<h3><span><?php _e( 'Debug Log', 'affiliate-wp' ); ?></span></h3>
 				<div class="inside">
 					<form id="affwp-debug-log" method="post">
-						<p><?php _e( 'Use this tool to help debug various operations in AffiliateWP.', 'affiliate-wp' ); ?></p>
-						<textarea class="large-text" rows="15"><?php echo esc_textarea( $logs->get_log() ); ?></textarea>
+						<p><?php _e( 'Use this tool to help debug referral tracking.', 'affiliate-wp' ); ?></p>
+						<textarea class="large-text" rows="15"><?php echo esc_textarea( affiliate_wp()->utils->logs->get_log() ); ?></textarea>
 						<input type="submit" class="button" name="affwp-clear-debug-log" value="<?php _e( 'Clear Debug Log', 'affiliate-wp' ); ?>"/>
 						<?php wp_nonce_field( 'affwp-clear-debug' ); ?>
 					</form>
@@ -485,8 +483,8 @@ function affwp_clear_debug_log() {
 
 	check_admin_referer( 'affwp-clear-debug' );
 
-	$logs = new Affiliate_WP_Logging;
-	$logs->clear_log();
+	// Clear the debug log.
+	affiliate_wp()->utils->logs->clear_log();
 
 	wp_safe_redirect( affwp_admin_url( 'tools', array( 'tab' => 'debug' ) ) );
 	exit;
