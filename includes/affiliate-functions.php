@@ -1042,7 +1042,10 @@ function affwp_get_affiliate_campaigns( $affiliate = 0 ) {
 		return false;
 	}
 
-	$campaigns = affiliate_wp()->campaigns->get_campaigns( $affiliate->ID );
+	$campaigns = affiliate_wp()->campaigns->get_campaigns( array(
+		'affiliate_id' => $affiliate->ID,
+		'number'       => 100,
+	) );
 
 	/**
 	 * Filters the list of campaigns associated with an affiliate.
@@ -1329,7 +1332,8 @@ function affwp_get_affiliate_referral_url( $args = array() ) {
 
 	$url_scheme      = isset( $url_parts['scheme'] ) ? $url_parts['scheme'] : 'http';
 	$url_host        = isset( $url_parts['host'] ) ? $url_parts['host'] : '';
-	$constructed_url = $url_scheme . '://' . $url_host . $url_parts['path'];
+	$url_path        = isset( $url_parts['path'] ) ? $url_parts['path'] : '';
+	$constructed_url = $url_scheme . '://' . $url_host . $url_path;
 	$base_url        = $constructed_url;
 
 	// set up URLs
