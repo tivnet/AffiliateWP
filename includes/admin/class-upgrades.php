@@ -57,12 +57,6 @@ class Affiliate_WP_Upgrades {
 		$settings = new Affiliate_WP_Settings;
 		$this->debug = (bool) $settings->get( 'debug_mode', false );
 
-		if ( $this->debug ) {
-			require_once AFFILIATEWP_PLUGIN_DIR . 'includes/class-logging.php';
-
-			$this->logs = new Affiliate_WP_Logging;
-		}
-
 		add_action( 'affwp_batch_process_init', array( $this, 'register_batch_upgrades' ) );
 	}
 
@@ -462,13 +456,13 @@ class Affiliate_WP_Upgrades {
 	 */
 	private function v19_upgrade() {
 		@affiliate_wp()->referrals->create_table();
-		$this->log( 'Upgrade: The Referrals table upgrade for 1.9 has completed.' );
+		@affiliate_wp()->utils->log( 'Upgrade: The Referrals table upgrade for 1.9 has completed.' );
 
 		@affiliate_wp()->affiliates->payouts->create_table();
-		$this->log( 'Upgrade: The Payouts table creation process for 1.9 has completed.' );
+		@affiliate_wp()->utils->log( 'Upgrade: The Payouts table creation process for 1.9 has completed.' );
 
 		@affiliate_wp()->REST->consumers->create_table();
-		$this->log( 'Upgrade: The API consumers table creation process for 1.9 has completed' );
+		@affiliate_wp()->utils->log( 'Upgrade: The API consumers table creation process for 1.9 has completed' );
 
 		$this->upgraded = true;
 	}
@@ -481,10 +475,10 @@ class Affiliate_WP_Upgrades {
 	 */
 	private function v195_upgrade() {
 		@affiliate_wp()->affiliates->payouts->create_table();
-		$this->log( 'Upgrade: The Payouts table upgrade for 1.9.5 has completed.' );
+		@affiliate_wp()->utils->log( 'Upgrade: The Payouts table upgrade for 1.9.5 has completed.' );
 
 		wp_cache_set( 'last_changed', microtime(), 'payouts' );
-		$this->log( 'Upgrade: The Payouts cache has been invalidated following the 1.9.5 upgrade routine.' );
+		@affiliate_wp()->utils->log( 'Upgrade: The Payouts cache has been invalidated following the 1.9.5 upgrade routine.' );
 
 		$this->upgraded = true;
 	}
@@ -498,7 +492,7 @@ class Affiliate_WP_Upgrades {
 	private function v20_upgrade() {
 		// New primitive and meta capabilities.
 		@affiliate_wp()->capabilities->add_caps();
-		$this->log( 'Upgrade: Core capabilities have been upgraded.' );
+		@affiliate_wp()->utils->log( 'Upgrade: Core capabilities have been upgraded.' );
 
 
 		// Update settings
@@ -508,14 +502,14 @@ class Affiliate_WP_Upgrades {
 				'website_url' => __( 'Website URL', 'affiliate-wp' )
 			)
 		), $save = true );
-		$this->log( 'Upgrade: The default required registration field settings have been configured.' );
+		@affiliate_wp()->utils->log( 'Upgrade: The default required registration field settings have been configured.' );
 
 		// Affiliate schema update.
 		@affiliate_wp()->affiliates->create_table();
-		$this->log( 'Upgrade: The unpaid_earnings column has been added to the affiliates table.' );
+		@affiliate_wp()->utils->log( 'Upgrade: The unpaid_earnings column has been added to the affiliates table.' );
 
 		wp_cache_set( 'last_changed', microtime(), 'affiliates' );
-		$this->log( 'Upgrade: The Affiliates cache has been invalidated following the 2.0 upgrade.' );
+		@affiliate_wp()->utils->log( 'Upgrade: The Affiliates cache has been invalidated following the 2.0 upgrade.' );
 
 		$this->upgraded = true;
 	}
