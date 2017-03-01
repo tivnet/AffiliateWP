@@ -305,7 +305,9 @@ function affwp_delete_referral( $referral ) {
  */
 function affwp_calc_referral_amount( $amount = '', $affiliate_id = 0, $reference = 0, $rate = '', $product_id = 0 ) {
 
-	$rate     = affwp_get_affiliate_rate( $affiliate_id, false, $rate, $reference );
+	$rate = affwp_sanitize_amount( $rate );
+	$rate = affwp_get_affiliate_rate( $affiliate_id, false, $rate, $reference );
+
 	$type     = affwp_get_affiliate_rate_type( $affiliate_id );
 	$decimals = affwp_get_decimal_count();
 
