@@ -426,7 +426,7 @@ abstract class Affiliate_WP_DB {
 	}
 
 	/**
-	 * Builds a date query for the given column use WP_Date_Query.
+	 * Builds a date query for the given column using WP_Date_Query.
 	 *
 	 * @access public
 	 * @since  2.1
