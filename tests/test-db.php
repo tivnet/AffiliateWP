@@ -120,7 +120,24 @@ class Tests extends UnitTestCase {
 	 * @covers \Affiliate_WP_DB::get_date_sql()
 	 */
 	public function test_get_date_sql_with_date_query_args_array_should_form_sql_for_items_between_dates() {
+		$start_timestampe = time() - WEEK_IN_SECONDS;
+		$end_timestamp    = time() + WEEK_IN_SECONDS;
 
+		$args = array(
+			'date' => array(
+				'start' => date( 'm/d/Y', $start_timestampe ),
+				'end'   => date( 'm/d/Y', $end_timestamp )
+			)
+		);
+
+		$expected_sql = sprintf( "date_registered >= '%1s' AND date_registered <= '%2s'",
+			date( 'Y-m-d 00:00:00', $start_timestampe ),
+			date( 'Y-m-d 00:00:00', $end_timestamp )
+		);
+
+		$result = affiliate_wp()->affiliates->get_date_sql( $args, '', 'date_registered' );
+
+		$this->assertContains( $expected_sql, $result );
 	}
 
 	/**
