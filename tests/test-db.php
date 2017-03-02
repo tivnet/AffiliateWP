@@ -81,4 +81,47 @@ class Tests extends UnitTestCase {
 
 		$this->assertSame( wp_unslash( $description ), $stored );
 	}
+
+	/**
+	 * @covers \Affiliate_WP_DB::get_date_sql()
+	 */
+	public function test_get_date_sql_with_date_query_args_array_start_only_should_form_sql_for_items_after_given_date() {
+		$timestamp = time() - WEEK_IN_SECONDS;
+		$args      = array(
+			'date' => array(
+				'start' => date( 'm/d/Y', $timestamp )
+			)
+		);
+
+		$base_sql = "AND ( 
+  date_registered > '%s'";
+
+		$expected_sql = sprintf( $base_sql, date( 'Y-m-d 00:00:00', $timestamp ) );
+		$result       = affiliate_wp()->affiliates->get_date_sql( $args, '', 'date_registered' );
+
+		$this->assertContains( $expected_sql, $result );
+	}
+
+	/**
+	 * @covers \Affiliate_WP_DB::get_date_sql()
+	 */
+	public function test_get_date_sql_with_date_query_args_array_end_only_should_form_sql_for_items_before_given_date() {
+
+	}
+
+	/**
+	 * @covers \Affiliate_WP_DB::get_date_sql()
+	 */
+	public function test_get_date_sql_with_date_query_args_array_should_form_sql_for_items_between_dates() {
+
+	}
+
+	/**
+	 * @covers \Affiliate_WP_DB::get_date_sql()
+	 */
+	public function test_get_date_sql_with_date_query_args_string_should_form_sql_for_specific_date() {
+
+	}
+
+
 }
