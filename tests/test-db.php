@@ -93,10 +93,7 @@ class Tests extends UnitTestCase {
 			)
 		);
 
-		$base_sql = "AND ( 
-  date_registered > '%s'";
-
-		$expected_sql = sprintf( $base_sql, date( 'Y-m-d 00:00:00', $timestamp ) );
+		$expected_sql = sprintf( "date_registered > '%s'", date( 'Y-m-d 00:00:00', $timestamp ) );
 		$result       = affiliate_wp()->affiliates->get_date_sql( $args, '', 'date_registered' );
 
 		$this->assertContains( $expected_sql, $result );
