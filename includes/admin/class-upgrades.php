@@ -149,9 +149,7 @@ class Affiliate_WP_Upgrades {
 	 * @param string $message Optional. Message to log.
 	 */
 	private function log( $message = '' ) {
-		if ( $this->debug ) {
-			$this->logs->log( $message );
-		}
+		affiliate_wp()->utils->log( $message );
 	}
 
 	/**
