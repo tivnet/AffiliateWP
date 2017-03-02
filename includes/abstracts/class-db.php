@@ -475,7 +475,7 @@ abstract class Affiliate_WP_DB {
 
 			// Core handles the AND in WP_Date_Query->get_sql_clauses().
 			if( empty( $where ) ) {
-				$sql .= "WHERE ";
+				$sql .= "WHERE 1=1";
 			}
 
 			if ( ! empty( $date_query_args['before'] ) && ! empty( $date_query_args['after'] ) ) {
