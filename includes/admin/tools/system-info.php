@@ -72,6 +72,7 @@ function affwp_tools_system_info_report() {
 	$return .= 'Show Pretty URLs:                 ' . ( $settings->get( 'referral_pretty_urls' ) ? "True" . "\n" : "False\n" );
 	$return .= 'Referral Rate Type:               ' . ( $settings->get( 'referral_rate_type' ) ? $settings->get( 'referral_rate_type' ) . "\n" : "Default\n" );
 	$return .= 'Referral Rate:                    ' . ( $settings->get( 'referral_rate' ) ? $settings->get( 'referral_rate' ) . "\n" : "Default\n" );
+	$return .= 'Credit Last Referrer:             ' . ( $settings->get( 'referral_credit_last' ) ? "True\n" : "False\n" );
 
 	// Registration Fields
 	$return .= "\n" . '-- AffiliateWP Registration Settings' . "\n\n";
