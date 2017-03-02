@@ -103,7 +103,17 @@ class Tests extends UnitTestCase {
 	 * @covers \Affiliate_WP_DB::get_date_sql()
 	 */
 	public function test_get_date_sql_with_date_query_args_array_end_only_should_form_sql_for_items_before_given_date() {
+		$timestamp = time() + WEEK_IN_SECONDS;
+		$args      = array(
+			'date' => array(
+				'end' => date( 'm/d/Y', $timestamp )
+			)
+		);
 
+		$expected_sql = sprintf( "date_registered < '%s'", date( 'Y-m-d 00:00:00', $timestamp ) );
+		$result       = affiliate_wp()->affiliates->get_date_sql( $args, '', 'date_registered' );
+
+		$this->assertContains( $expected_sql, $result );
 	}
 
 	/**
