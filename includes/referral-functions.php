@@ -192,7 +192,7 @@ function affwp_add_referral( $data = array() ) {
 		return 0;
 	}
 
-	$data = affiliate_wp()->utils->process_post_data( $data, 'user_name' );
+	$data = affiliate_wp()->utils->process_request_data( $data, 'user_name' );
 
 	if ( empty( $data['affiliate_id'] ) ) {
 
@@ -219,6 +219,10 @@ function affwp_add_referral( $data = array() ) {
 		'context'      => ! empty( $data['context'] )     ? sanitize_text_field( $data['context'] )     : '',
 		'status'       => 'pending',
 	);
+
+	if ( ! empty( $data['visit_id'] ) && ! affiliate_wp()->referrals->get_by( 'visit_id', $data['visit_id'] ) ) {
+		$args['visit_id'] = absint( $data['visit_id'] );
+	}
 
 	if ( ! empty( $data['date'] ) ) {
 		$args['date'] = date_i18n( 'Y-m-d H:i:s', strtotime( $data['date'] ) );

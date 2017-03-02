@@ -112,8 +112,7 @@ class Affiliate_WP_Upgrades {
 			$this->v195_upgrade();
 		}
 
-		// TODO: switch && to || before final release.
-		if ( version_compare( $this->version, '2.0', '<' ) && ! affwp_has_upgrade_completed( 'upgrade_v20_recount_unpaid_earnings' ) ) {
+		if ( version_compare( $this->version, '2.0', '<' ) || ! affwp_has_upgrade_completed( 'upgrade_v20_recount_unpaid_earnings' ) ) {
 			$this->v20_upgrade();
 		}
 
@@ -513,9 +512,6 @@ class Affiliate_WP_Upgrades {
 
 		wp_cache_set( 'last_changed', microtime(), 'affiliates' );
 		$this->log( 'Upgrade: The Affiliates cache has been invalidated following the 2.0 upgrade.' );
-
-		// Set the DB Upgrade flag.
-		@affiliate_wp()->settings->set( array( 'affwp_upgrade_needed' => true ), $save = true );
 
 		$this->upgraded = true;
 	}

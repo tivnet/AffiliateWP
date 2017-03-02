@@ -202,7 +202,7 @@ jQuery(document).ready(function($) {
 	 *
 	 * @return {void}
 	 */
-	if ( typeof postboxes !== 'undefined' ) {
+	if ( typeof postboxes !== 'undefined' && /affiliate-wp/.test( pagenow ) ) {
 		postboxes.add_postbox_toggles( pagenow );
 	}
 
@@ -310,7 +310,7 @@ jQuery(document).ready(function($) {
 						} else if ( response.data.done ) {
 
 							spinner.remove();
-							notice_wrap.html('<div id="affwp-batch-success" class="updated notice is-dismissible"><p>' + response.data.message + '<span class="notice-dismiss"></span></p></div>');
+							notice_wrap.html('<div id="affwp-batch-success" class="updated notice"><p class="affwp-batch-success">' + response.data.message + '<span class="notice-dismiss"></span></p></div>');
 
 							if ( response.data.url ) {
 								window.location = response.data.url;
