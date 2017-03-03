@@ -479,11 +479,12 @@ class Affiliate_WP_Admin_Notices {
 					/**
 					 * Fires once a notice has been flagged for dismissal.
 					 *
-					 * @since 1.8
+					 * @since 1.8 as 'affwp_dismiss_notices'
+					 * @since 2.0.4 Renamed to 'affwp_dismiss_notices_default' to avoid a dynamic hook conflict.
 					 *
 					 * @param string $notice Notice value via $_GET['affwp_notice'].
 					 */
-					do_action( 'affwp_dismiss_notices', $notice );
+					do_action( 'affwp_dismiss_notices_default', $notice );
 					break;
 			}
 
