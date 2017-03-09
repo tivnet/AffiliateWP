@@ -40,6 +40,10 @@ class Affiliate_WP_Tracking {
 		 *
 		 * An explicitly false value must be passed back to the filter to execute the short-circuit.
 		 *
+		 * Example:
+		 *
+		 *     add_filter( 'affwp_tracking_skip_track_visit', '__return_false' );
+		 *
 		 * @since 2.0.5
 		 *
 		 * @param bool                   $skip Whether to skip tracking a visit. Default true.
