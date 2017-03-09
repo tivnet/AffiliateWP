@@ -45,7 +45,7 @@ class Affiliate_WP_Tracking {
 		 * @param bool                   $skip Whether to skip tracking a visit. Default true.
 		 * @param \Affiliate_WP_Tracking $this Tracking class instance.
 		 */
-		if ( false === apply_filters( 'affwp_skip_track_visit', true, $this ) ) {
+		if ( false === apply_filters( 'affwp_tracking_skip_track_visit', true, $this ) ) {
 			affiliate_wp()->utils->log( 'Visit creation skipped during tracking via affwp_skip_track_visit hook.' );
 
 			return;
