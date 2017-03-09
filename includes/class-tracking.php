@@ -38,18 +38,18 @@ class Affiliate_WP_Tracking {
 		/**
 		 * Filters whether to completely short-circuit tracking a visit.
 		 *
-		 * An explicitly false value must be passed back to the filter to execute the short-circuit.
+		 * An explicitly true value must be passed back to the filter to execute the short-circuit.
 		 *
 		 * Example:
 		 *
-		 *     add_filter( 'affwp_tracking_skip_track_visit', '__return_false' );
+		 *     add_filter( 'affwp_tracking_skip_track_visit', '__return_true' );
 		 *
 		 * @since 2.0.5
 		 *
-		 * @param bool                   $skip Whether to skip tracking a visit. Default true.
+		 * @param bool                   $skip Whether to skip tracking a visit. Default false.
 		 * @param \Affiliate_WP_Tracking $this Tracking class instance.
 		 */
-		if ( false === apply_filters( 'affwp_tracking_skip_track_visit', true, $this ) ) {
+		if ( true === apply_filters( 'affwp_tracking_skip_track_visit', false, $this ) ) {
 			affiliate_wp()->utils->log( 'Visit creation skipped during tracking via affwp_skip_track_visit hook.' );
 
 			return;
