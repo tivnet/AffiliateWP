@@ -35,6 +35,22 @@ class Affiliate_WP_Tracking {
 	 */
 	public function __construct() {
 
+		/**
+		 * Filters whether to completely short-circuit tracking a visit.
+		 *
+		 * An explicitly false value must be passed back to the filter to execute the short-circuit.
+		 *
+		 * @since 2.0.5
+		 *
+		 * @param bool                   $skip Whether to skip tracking a visit. Default true.
+		 * @param \Affiliate_WP_Tracking $this Tracking class instance.
+		 */
+		if ( false === apply_filters( 'affwp_skip_track_visit', true, $this ) ) {
+			affiliate_wp()->utils->log( 'Visit creation skipped during tracking via affwp_skip_track_visit hook.' );
+
+			return;
+		}
+
 		$this->set_expiration_time();
 		$this->set_referral_var();
 
