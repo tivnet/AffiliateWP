@@ -4,13 +4,21 @@ namespace AffWP\Utils\Batch_Process\Import;
 use AffWP\Utils\Batch_Process as Batch;
 use AffWP\Utils\Importer;
 
+/**
+ * CSV importer base class.
+ *
+ * @since 2.1
+ *
+ * @see \AffWP\Utils\Batch_Process\Import
+ * @see \AffWP\Utils\Importer\CSV
+ */
 class CSV extends Batch\Import implements Importer\CSV {
 
 	/**
 	 * The parsed CSV file being imported.
 	 *
 	 * @access public
-	 * @since  2.0
+	 * @since  2.1
 	 * @var    \parseCSV
 	 */
 	public $csv;
@@ -19,7 +27,7 @@ class CSV extends Batch\Import implements Importer\CSV {
 	 * Total rows in the CSV file.
 	 *
 	 * @access public
-	 * @since  2.0
+	 * @since  2.1
 	 * @var    int
 	 */
 	public $total;
@@ -28,7 +36,7 @@ class CSV extends Batch\Import implements Importer\CSV {
 	 * Map of CSV columns > database fields
 	 *
 	 * @access public
-	 * @since  2.0
+	 * @since  2.1
 	 * @var    array
 	 */
 	public $field_mapping = array();
@@ -37,7 +45,7 @@ class CSV extends Batch\Import implements Importer\CSV {
 	 * Instantiates the importer.
 	 *
 	 * @access public
-	 * @since  2.0
+	 * @since  2.1
 	 *
 	 * @param resource $_file File to import.
 	 * @param int      $_step Current step.
@@ -60,7 +68,7 @@ class CSV extends Batch\Import implements Importer\CSV {
 	 * Processes a single step (batch).
 	 *
 	 * @access public
-	 * @since  2.0
+	 * @since  2.1
 	 */
 	public function process_step() {
 
@@ -70,7 +78,7 @@ class CSV extends Batch\Import implements Importer\CSV {
 	 * Maps CSV columns to their corresponding import fields.
 	 *
 	 * @access public
-	 * @since  2.0
+	 * @since  2.1
 	 *
 	 * @param array $import_fields Import fields to map.
 	 */

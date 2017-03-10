@@ -5,7 +5,7 @@ namespace AffWP\Utils\Batch_Process;
  * Implements the base batch importer as an intermediary between a batch process
  * and the base importer class.
  *
- * @since 2.0
+ * @since 2.1
  *
  * @see \Affiliate_WP_Import
  */
@@ -15,7 +15,7 @@ class Import extends \Affiliate_WP_Import {
 	 * Batch process ID.
 	 *
 	 * @access public
-	 * @since  2.0
+	 * @since  2.1
 	 * @var    string
 	 */
 	public $batch_id;
@@ -24,7 +24,7 @@ class Import extends \Affiliate_WP_Import {
 	 * The file the export data will be stored in.
 	 *
 	 * @access protected
-	 * @since  2.0
+	 * @since  2.1
 	 * @var    resource
 	 */
 	protected $file;
@@ -33,7 +33,7 @@ class Import extends \Affiliate_WP_Import {
 	 * The current step being processed.
 	 *
 	 * @access public
-	 * @since  2.0
+	 * @since  2.1
 	 * @var    int
 	 */
 	public $step;
@@ -42,7 +42,7 @@ class Import extends \Affiliate_WP_Import {
 	 * The number of items to process per step.
 	 *
 	 * @access public
-	 * @since  2.0
+	 * @since  2.1
 	 * @var    int
 	 */
 	public $per_step = 20;
@@ -51,10 +51,9 @@ class Import extends \Affiliate_WP_Import {
 	 * Map of CSV columns > database fields
 	 *
 	 * @access public
-	 * @since  2.0
+	 * @since  2.1
 	 * @var    array
 	 */
 	public $field_mapping = array();
-
 
 }

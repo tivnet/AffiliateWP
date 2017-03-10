@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Promise for structuring CSV importers.
  *
- * @since 2.0
+ * @since 2.1
  *
  * @see \AffWP\Utils\Importer\Base
  */
@@ -21,7 +21,7 @@ interface CSV extends Importer\Base {
 	 * Sets the CSV columns.
 	 *
 	 * @access public
-	 * @since  2.0
+	 * @since  2.1
 	 *
 	 * @return array<string,string> CSV columns.
 	 */
@@ -33,7 +33,7 @@ interface CSV extends Importer\Base {
 	 * Alias for csv_cols(), usually used to implement a filter on the return.
 	 *
 	 * @access public
-	 * @since  2.0
+	 * @since  2.1
 	 *
 	 * @return array<string,string> CSV columns.
 	 */
@@ -43,7 +43,7 @@ interface CSV extends Importer\Base {
 	 * Outputs the CSV columns.
 	 *
 	 * @access public
-	 * @since  2.0
+	 * @since  2.1
 	 *
 	 * @return void
 	 */
@@ -53,7 +53,7 @@ interface CSV extends Importer\Base {
 	 * Outputs the CSV rows.
 	 *
 	 * @access public
-	 * @since  2.0
+	 * @since  2.1
 	 *
 	 * @return void
 	 */

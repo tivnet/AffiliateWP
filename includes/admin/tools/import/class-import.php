@@ -13,7 +13,7 @@ class Affiliate_WP_Import {
 	 * Used for import-type specific filters/actions.
 	 *
 	 * @access public
-	 * @since  2.0
+	 * @since  2.1
 	 * @var    string
 	 */
 	public $import_type = 'default';
@@ -22,7 +22,7 @@ class Affiliate_WP_Import {
 	 * Capability needed to perform the current import.
 	 *
 	 * @access public
-	 * @since  2.0
+	 * @since  2.1
 	 * @var    string
 	 */
 	public $capability = 'manage_affiliates';
@@ -31,7 +31,7 @@ class Affiliate_WP_Import {
 	 * The file being imported.
 	 *
 	 * @access public
-	 * @since  2.0
+	 * @since  2.1
 	 * @var    resource
 	 */
 	public $file;
@@ -40,7 +40,7 @@ class Affiliate_WP_Import {
 	 * Whether the import file is empty.
 	 *
 	 * @access public
-	 * @since  2.0
+	 * @since  2.1
 	 * @var    bool
 	 */
 	public $is_empty = false;
@@ -49,7 +49,7 @@ class Affiliate_WP_Import {
 	 * Instantiates the importer.
 	 *
 	 * @access public
-	 * @since  2.0
+	 * @since  2.1
 	 *
 	 * @param resource $_file File to import.
 	 * @param int      $_step Current step.
@@ -63,7 +63,7 @@ class Affiliate_WP_Import {
 	 * Determines whether the current user can perform an import.
 	 *
 	 * @access public
-	 * @since  2.0
+	 * @since  2.1
 	 *
 	 * @return bool Whether the current use can import.
 	 */
@@ -82,7 +82,7 @@ class Affiliate_WP_Import {
 	 * Retrieves the URL to the list table for the import data type.
 	 *
 	 * @access public
-	 * @since  2.0
+	 * @since  2.1
 	 *
 	 * @return string List table URL.
 	 */
@@ -92,7 +92,7 @@ class Affiliate_WP_Import {
 	 * Retrieves the label for the import type.
 	 *
 	 * @access public
-	 * @since  2.0
+	 * @since  2.1
 	 *
 	 * @return string Import type label.
 	 */
@@ -102,7 +102,7 @@ class Affiliate_WP_Import {
 	 * Converts a string containing delimiters to an array.
 	 *
 	 * @access public
-	 * @since  2.0
+	 * @since  2.1
 	 *
 	 * @param string $str Optional. Input string to convert to an array. Default empty.
 	 * @return array Derived array.
@@ -151,7 +151,7 @@ class Affiliate_WP_Import {
 	 * Trims a column value for preview.
 	 *
 	 * @access public
-	 * @since  2.0
+	 * @since  2.1
 	 *
 	 * @param string $str Optional. Input string to trim down. Default empty.
 	 * @return string String trimmed for preview.
