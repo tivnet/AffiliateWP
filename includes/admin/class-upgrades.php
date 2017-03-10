@@ -22,82 +22,122 @@ class Affiliate_WP_Upgrades {
 
 	private $upgraded = false;
 
-	public function __construct() {
+	/**
+	 * AffiliateWP version.
+	 *
+	 * @access private
+	 * @since  2.0
+	 * @var    string
+	 */
+	private $version;
+
+	/**
+	 * Utilities class instance.
+	 *
+	 * @access private
+	 * @since  2.0
+	 * @var    \Affiliate_WP_Utilities
+	 */
+	private $utils;
+
+	/**
+	 * Sets up the Upgrades class instance.
+	 *
+	 * @access public
+	 *
+	 * @param \Affiliate_WP_Utilities $utils Utilities class instance.
+	 */
+	public function __construct( $utils ) {
+
+		$this->utils   = $utils;
+		$this->version = get_option( 'affwp_version' );
 
 		add_action( 'admin_init', array( $this, 'init' ), -9999 );
 
 		$settings = new Affiliate_WP_Settings;
 		$this->debug = (bool) $settings->get( 'debug_mode', false );
 
-		if ( $this->debug ) {
-			require_once AFFILIATEWP_PLUGIN_DIR . 'includes/class-logging.php';
-
-			$this->logs = new Affiliate_WP_Logging;
-		}
+		add_action( 'affwp_batch_process_init', array( $this, 'register_batch_upgrades' ) );
 	}
 
 	public function init() {
 
-		$version = get_option( 'affwp_version' );
-		if ( empty( $version ) ) {
-			$version = '1.0.6'; // last version that didn't have the version option set
+		if ( empty( $this->version ) ) {
+			$this->version = '1.0.6'; // last version that didn't have the version option set
 		}
 
-		if ( version_compare( $version, '1.1', '<' ) ) {
+		if ( version_compare( $this->version, '1.1', '<' ) ) {
 			$this->v11_upgrades();
 		}
 
-		if ( version_compare( $version, '1.2.1', '<' ) ) {
+		if ( version_compare( $this->version, '1.2.1', '<' ) ) {
 			$this->v121_upgrades();
 		}
 
-		if ( version_compare( $version, '1.3', '<' ) ) {
+		if ( version_compare( $this->version, '1.3', '<' ) ) {
 			$this->v13_upgrades();
 		}
 
-		if ( version_compare( $version, '1.6', '<' ) ) {
+		if ( version_compare( $this->version, '1.6', '<' ) ) {
 			$this->v16_upgrades();
 		}
 
-		if ( version_compare( $version, '1.7', '<' ) ) {
+		if ( version_compare( $this->version, '1.7', '<' ) ) {
 			$this->v17_upgrades();
 		}
 
-		if ( version_compare( $version, '1.7.3', '<' ) ) {
+		if ( version_compare( $this->version, '1.7.3', '<' ) ) {
 			$this->v173_upgrades();
 		}
 
-		if ( version_compare( $version, '1.7.11', '<' ) ) {
+		if ( version_compare( $this->version, '1.7.11', '<' ) ) {
 			$this->v1711_upgrades();
 		}
 
-		if ( version_compare( $version, '1.7.14', '<' ) ) {
+		if ( version_compare( $this->version, '1.7.14', '<' ) ) {
 			$this->v1714_upgrades();
 		}
 
-		if ( version_compare( $version, '1.9', '<' ) ) {
+		if ( version_compare( $this->version, '1.9', '<' ) ) {
 			$this->v19_upgrade();
 		}
 
-		if ( version_compare( $version, '1.9.5', '<' ) ) {
+		if ( version_compare( $this->version, '1.9.5', '<' ) ) {
 			$this->v195_upgrade();
 		}
 
-		if ( version_compare( $version, '2.0', '<' ) ) {
+		if ( version_compare( $this->version, '2.0', '<' ) || ! affwp_has_upgrade_completed( 'upgrade_v20_recount_unpaid_earnings' ) ) {
 			$this->v20_upgrade();
 		}
 
+		if ( version_compare( $this->version, '2.0.2', '<' ) ) {
+			$this->v202_upgrade();
+		}
+
 		// Inconsistency between current and saved version.
-		if ( version_compare( $version, AFFILIATEWP_VERSION, '<>' ) ) {
+		if ( version_compare( $this->version, AFFILIATEWP_VERSION, '<>' ) ) {
 			$this->upgraded = true;
 		}
 
 		// If upgrades have occurred
 		if ( $this->upgraded ) {
-			update_option( 'affwp_version_upgraded_from', $version );
+			update_option( 'affwp_version_upgraded_from', $this->version );
 			update_option( 'affwp_version', AFFILIATEWP_VERSION );
 		}
 
+	}
+
+	/**
+	 * Registers batch upgrade routines.
+	 *
+	 * @access public
+	 * @since  2.0
+	 */
+	public function register_batch_upgrades() {
+		$this->utils->batch->register_process( 'recount-affiliate-stats-upgrade', array(
+			'class' => 'AffWP\Utils\Batch_Process\Upgrade_Recount_Stats',
+			'file'  => AFFILIATEWP_PLUGIN_DIR . 'includes/admin/tools/upgrades/class-batch-upgrade-recount-affiliate-stats.php',
+		) );
 	}
 
 	/**
@@ -109,9 +149,7 @@ class Affiliate_WP_Upgrades {
 	 * @param string $message Optional. Message to log.
 	 */
 	private function log( $message = '' ) {
-		if ( $this->debug ) {
-			$this->logs->log( $message );
-		}
+		affiliate_wp()->utils->log( $message );
 	}
 
 	/**
@@ -416,13 +454,13 @@ class Affiliate_WP_Upgrades {
 	 */
 	private function v19_upgrade() {
 		@affiliate_wp()->referrals->create_table();
-		$this->log( 'Upgrade: The Referrals table upgrade for 1.9 has completed.' );
+		@affiliate_wp()->utils->log( 'Upgrade: The Referrals table upgrade for 1.9 has completed.' );
 
 		@affiliate_wp()->affiliates->payouts->create_table();
-		$this->log( 'Upgrade: The Payouts table creation process for 1.9 has completed.' );
+		@affiliate_wp()->utils->log( 'Upgrade: The Payouts table creation process for 1.9 has completed.' );
 
 		@affiliate_wp()->REST->consumers->create_table();
-		$this->log( 'Upgrade: The API consumers table creation process for 1.9 has completed' );
+		@affiliate_wp()->utils->log( 'Upgrade: The API consumers table creation process for 1.9 has completed' );
 
 		$this->upgraded = true;
 	}
@@ -435,10 +473,10 @@ class Affiliate_WP_Upgrades {
 	 */
 	private function v195_upgrade() {
 		@affiliate_wp()->affiliates->payouts->create_table();
-		$this->log( 'Upgrade: The Payouts table upgrade for 1.9.5 has completed.' );
+		@affiliate_wp()->utils->log( 'Upgrade: The Payouts table upgrade for 1.9.5 has completed.' );
 
 		wp_cache_set( 'last_changed', microtime(), 'payouts' );
-		$this->log( 'Upgrade: The Payouts cache has been invalidated following the 1.9.5 upgrade routine.' );
+		@affiliate_wp()->utils->log( 'Upgrade: The Payouts cache has been invalidated following the 1.9.5 upgrade routine.' );
 
 		$this->upgraded = true;
 	}
@@ -450,8 +488,9 @@ class Affiliate_WP_Upgrades {
 	 * @access private
 	 */
 	private function v20_upgrade() {
+		// New primitive and meta capabilities.
 		@affiliate_wp()->capabilities->add_caps();
-		$this->log( 'Upgrade: Core capabilities have been upgraded.' );
+		@affiliate_wp()->utils->log( 'Upgrade: Core capabilities have been upgraded.' );
 
 
 		// Update settings
@@ -461,10 +500,32 @@ class Affiliate_WP_Upgrades {
 				'website_url' => __( 'Website URL', 'affiliate-wp' )
 			)
 		), $save = true );
+		@affiliate_wp()->utils->log( 'Upgrade: The default required registration field settings have been configured.' );
+
+		// Affiliate schema update.
+		@affiliate_wp()->affiliates->create_table();
+		@affiliate_wp()->utils->log( 'Upgrade: The unpaid_earnings column has been added to the affiliates table.' );
+
+		wp_cache_set( 'last_changed', microtime(), 'affiliates' );
+		@affiliate_wp()->utils->log( 'Upgrade: The Affiliates cache has been invalidated following the 2.0 upgrade.' );
 
 		$this->upgraded = true;
-
 	}
 
+	/**
+	 * Performs database upgrades for version 2.0.2.
+	 *
+	 * @since 2.0.2
+	 * @access private
+	 */
+	private function v202_upgrade() {
+		// New 'context' column for visits.
+		@affiliate_wp()->visits->create_table();
+		$this->log( 'Upgrade: The context column has been added to the Visits table.' );
+
+		wp_cache_set( 'last_changed', microtime(), 'visits' );
+		$this->log( 'Upgrade: The Visits cache has been invalidated following the 2.0.2 upgrade.' );
+
+		$this->upgraded = true;
+	}
 }
-new Affiliate_WP_Upgrades;

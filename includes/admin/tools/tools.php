@@ -55,11 +55,14 @@ function affwp_tools_admin() {
 		</h2>
 		<div id="tab_container">
 			<?php
-
 			/**
-			 * Fires in the Tools screen tab
+			 * Fires in the Tools screen tab.
+			 *
+			 * The dynamic portion of the hook name, `$active_tab`, refers to the slug of
+			 * the currently active tools tab.
 			 */
-			do_action( 'affwp_tools_tab_' . $active_tab ); ?>
+			do_action( 'affwp_tools_tab_' . $active_tab );
+			?>
 		</div><!-- #tab_container-->
 	</div><!-- .wrap -->
 	<?php
@@ -141,20 +144,20 @@ function affwp_recount_tab() {
 				<h3><span><?php _e( 'Recount Affiliate Stats', 'affiliate-wp' ); ?></span></h3>
 				<div class="inside">
 					<p><?php _e( 'Use this tool to recount affiliate statistics.', 'affiliate-wp' ); ?></p>
-					<form method="post" enctype="multipart/form-data" action="<?php echo esc_url( affwp_admin_url( 'tools', array( 'tab' => 'recount' ) ) ); ?>">
+					<form method="post" enctype="multipart/form-data" class="affwp-batch-form" data-batch_id="recount-affiliate-stats" data-nonce="<?php echo esc_attr( wp_create_nonce( 'recount-affiliate-stats_step_nonce' ) ); ?>">
 						<p>
 							<span class="affwp-ajax-search-wrap">
 								<input type="text" name="user_name" id="user_name" class="affwp-user-search" autocomplete="off" placeholder="<?php _e( 'Affiliate name', 'affiliate-wp' ); ?>"/>
 							</span>
 							<select name="recount_type">
 								<option value="earnings"><?php _e( 'Paid Earnings', 'affiliate-wp' ); ?></option>
+								<option value="unpaid-earnings"><?php _e( 'Unpaid Earnings', 'affiliate-wp' ); ?></option>
 								<option value="referrals"><?php _e( 'Referrals', 'affiliate-wp' ); ?></option>
 								<option value="visits"><?php _e( 'Visits', 'affiliate-wp' ); ?></option>
 							</select>
 							<div class="description"><?php _e( 'Enter the name of the affiliate or begin typing to perform a search based on the affiliate&#8217;s name.', 'affiliate-wp' ); ?></div>
 						</p>
 						<p>
-							<input type="hidden" name="user_id" id="user_id" value="0"/>
 							<input type="hidden" name="affwp_action" value="recount_stats"/>
 							<?php submit_button( __( 'Recount', 'affiliate-wp' ), 'secondary', 'recount-stats-submit', false ); ?>
 						</p>
@@ -232,7 +235,7 @@ function affwp_migration_tab() {
 				<h3><span>Affiliates Pro</span></h3>
 				<div class="inside">
 					<p><?php _e( 'Use this tool to migrate existing affiliate / referral data from Affiliates Pro to AffiliateWP.', 'affiliate-wp' ); ?></p>
-					<p><?php _e( '<strong>NOTE:</strong> this tool should only ever be used on a fresh install. If you have already collected affiliate or referral data, do not use this tool.', 'affiliate-wp' ); ?></p>
+					<p><?php _e( '<strong>NOTE:</strong> This tool should only ever be used on a fresh install. If you have already collected affiliate or referral data, do not use this tool.', 'affiliate-wp' ); ?></p>
 					<form method="get">
 						<input type="hidden" name="type" value="affiliates-pro"/>
 						<input type="hidden" name="part" value="affiliates"/>
@@ -301,7 +304,6 @@ function affwp_export_import_tab() {
 						<p>
 							<span class="affwp-ajax-search-wrap">
 								<input type="text" name="user_name" id="user_name" class="affwp-user-search" autocomplete="off" placeholder="<?php _e( 'Affiliate name', 'affiliate-wp' ); ?>" />
-								<input type="hidden" name="user_id" id="user_id" value=""/>
 							</span>
 							<input type="text" class="affwp-datepicker" autocomplete="off" name="start_date" placeholder="<?php _e( 'From - mm/dd/yyyy', 'affiliate-wp' ); ?>"/>
 							<input type="text" class="affwp-datepicker" autocomplete="off" name="end_date" placeholder="<?php _e( 'To - mm/dd/yyyy', 'affiliate-wp' ); ?>"/>
@@ -329,7 +331,6 @@ function affwp_export_import_tab() {
 						<p>
 							<span class="affwp-ajax-search-wrap">
 								<input type="text" name="user_name" id="user_name" class="affwp-user-search" autocomplete="off" placeholder="<?php _e( 'Affiliate name', 'affiliate-wp' ); ?>" />
-								<input type="hidden" name="user_id" id="user_id" value=""/>
 							</span>
 							<input type="text" class="affwp-datepicker" autocomplete="off" name="start_date" placeholder="<?php _e( 'From - mm/dd/yyyy', 'affiliate-wp' ); ?>"/>
 							<input type="text" class="affwp-datepicker" autocomplete="off" name="end_date" placeholder="<?php _e( 'To - mm/dd/yyyy', 'affiliate-wp' ); ?>"/>
@@ -444,9 +445,7 @@ add_action( 'admin_init', 'affwp_tools_sysinfo_download' );
  * @return      void
  */
 function affwp_debug_tab() {
-
-	$logs = new Affiliate_WP_Logging;
-?>
+	?>
 	<div id="affwp-dashboard-widgets-wrap">
 		<div class="metabox-holder">
 			<div class="postbox">
@@ -454,9 +453,15 @@ function affwp_debug_tab() {
 				<div class="inside">
 					<form id="affwp-debug-log" method="post">
 						<p><?php _e( 'Use this tool to help debug referral tracking.', 'affiliate-wp' ); ?></p>
-						<textarea class="large-text" rows="15"><?php echo esc_textarea( $logs->get_log() ); ?></textarea>
-						<input type="submit" class="button" name="affwp-clear-debug-log" value="<?php _e( 'Clear Debug Log', 'affiliate-wp' ); ?>"/>
-						<?php wp_nonce_field( 'affwp-clear-debug' ); ?>
+						<textarea readonly="readonly" onclick="this.focus(); this.select()" class="large-text" rows="15" name="affwp-debug-log-contents"><?php echo esc_textarea( affiliate_wp()->utils->logs->get_log() ); ?></textarea>
+						<p class="submit">
+							<input type="hidden" name="affwp_action" value="submit_debug_log" />
+							<?php
+							submit_button( __( 'Download Debug Log File', 'affiliate-wp' ), 'primary', 'affwp-download-debug-log', false );
+							submit_button( __( 'Clear Log', 'affiliate-wp' ), 'secondary affwp-inline-button', 'affwp-clear-debug-log', false  );
+							?>
+						</p>
+						<?php wp_nonce_field( 'affwp-debug-log-action' ); ?>
 					</form>
 				</div><!-- .inside -->
 			</div><!-- .postbox -->
@@ -467,31 +472,50 @@ function affwp_debug_tab() {
 add_action( 'affwp_tools_tab_debug', 'affwp_debug_tab' );
 
 /**
+ * Handles submit actions for the debug log.
+ *
+ * @since 2.1
+ */
+function affwp_submit_debug_log() {
+	if ( ! current_user_can( 'manage_affiliate_options' ) ) {
+		return;
+	}
+
+	check_admin_referer( 'affwp-debug-log-action' );
+
+	if ( isset( $_REQUEST['affwp-download-debug-log'] ) ) {
+		nocache_headers();
+
+		header( 'Content-Type: text/plain' );
+		header( 'Content-Disposition: attachment; filename="affwp-debug-log.txt"' );
+
+		echo wp_strip_all_tags( $_REQUEST['affwp-debug-log-contents'] );
+		exit;
+
+	} elseif ( isset( $_REQUEST['affwp-clear-debug-log'] ) ) {
+
+		// Clear the debug log.
+		affiliate_wp()->utils->logs->clear_log();
+
+		wp_safe_redirect( affwp_admin_url( 'tools', array( 'tab' => 'debug' ) ) );
+		exit;
+
+	}
+}
+add_action( 'affwp_submit_debug_log', 'affwp_submit_debug_log' );
+
+/**
  * Clear the debug log
  *
  * @since       1.7.15
- * @return      void
+ * @deprecated  2.1 See affwp_submit_debug_log
+ * @see         affwp_submit_debug_log()
  */
 function affwp_clear_debug_log() {
+	_deprecated_function( __FUNCTION__, '2.1', 'affwp_submit_debug_log' );
 
-	if( empty( $_POST['affwp-clear-debug-log'] ) ) {
-		return;
-	}
-
-	if( ! current_user_can( 'manage_affiliate_options' ) ) {
-		return;
-	}
-
-	check_admin_referer( 'affwp-clear-debug' );
-
-	$logs = new Affiliate_WP_Logging;
-	$logs->clear_log();
-
-	wp_safe_redirect( affwp_admin_url( 'tools', array( 'tab' => 'debug' ) ) );
-	exit;
-
+	affwp_submit_debug_log();
 }
-add_action( 'admin_init', 'affwp_clear_debug_log' );
 
 /**
  * Renders the API Keys tools tab.

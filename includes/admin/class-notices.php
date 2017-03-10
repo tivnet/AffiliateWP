@@ -7,6 +7,15 @@
 class Affiliate_WP_Admin_Notices {
 
 	/**
+	 * Current AffiliateWP version.
+	 *
+	 * @access private
+	 * @since  2.0
+	 * @var    string
+	 */
+	private $version;
+
+	/**
 	 * Constructor.
 	 *
 	 * @since 1.0
@@ -15,6 +24,8 @@ class Affiliate_WP_Admin_Notices {
 	public function __construct() {
 
 		add_action( 'admin_notices', array( $this, 'show_notices' ) );
+		add_action( 'admin_notices', array( $this, 'upgrade_notices' ) );
+
 		add_action( 'affwp_dismiss_notices', array( $this, 'dismiss_notices' ) );
 	}
 
@@ -218,6 +229,12 @@ class Affiliate_WP_Admin_Notices {
 
 					break;
 
+				case 'payout_created' :
+
+					$message = sprintf( __( 'A payout has been created.', 'affiliate-wp' ) );
+
+					break;
+
 				// Creatives.
 				case 'creative_updated' :
 
@@ -407,7 +424,31 @@ class Affiliate_WP_Admin_Notices {
 			}
 
 		}
+	}
 
+	/**
+	 * Displays upgrade notices.
+	 *
+	 * @access public
+	 * @since  2.0
+	 */
+	public function upgrade_notices() {
+
+		// TODO: switch && to || before final release.
+		if ( version_compare( $this->version, '2.0', '<' ) && ! affwp_has_upgrade_completed( 'upgrade_v20_recount_unpaid_earnings' ) ) :
+
+			// Enqueue admin JS for the batch processor.
+			affwp_enqueue_admin_js();
+			?>
+			<div class="notice notice-info is-dismissible">
+				<p><?php _e( 'Your database needs to be upgraded following the latest AffiliateWP update.', 'affiliate-wp-' ); ?></p>
+				<form method="post" class="affwp-batch-form" data-batch_id="recount-affiliate-stats-upgrade" data-nonce="<?php echo esc_attr( wp_create_nonce( 'recount-affiliate-stats-upgrade_step_nonce' ) ); ?>">
+					<p>
+						<?php submit_button( __( 'Upgrade Database', 'affiliate-wp' ), 'secondary', 'v20-recount-unpaid-earnings', false ); ?>
+					</p>
+				</form>
+			</div>
+		<?php endif;
 	}
 
 	/**
@@ -438,11 +479,12 @@ class Affiliate_WP_Admin_Notices {
 					/**
 					 * Fires once a notice has been flagged for dismissal.
 					 *
-					 * @since 1.8
+					 * @since 1.8 as 'affwp_dismiss_notices'
+					 * @since 2.0.4 Renamed to 'affwp_dismiss_notices_default' to avoid a dynamic hook conflict.
 					 *
 					 * @param string $notice Notice value via $_GET['affwp_notice'].
 					 */
-					do_action( 'affwp_dismiss_notices', $notice );
+					do_action( 'affwp_dismiss_notices_default', $notice );
 					break;
 			}
 
@@ -450,5 +492,6 @@ class Affiliate_WP_Admin_Notices {
 			exit;
 		}
 	}
+
 }
 new Affiliate_WP_Admin_Notices;

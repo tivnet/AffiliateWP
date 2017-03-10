@@ -23,18 +23,18 @@ class Registry {
 	private $batch_ids = array();
 
 	/**
-	 * Instantiates the batch processor class.
+	 * Initializes the batch registry.
 	 *
 	 * @access public
 	 * @since  2.0
 	 */
-	public function __construct() {
+	public function init() {
 
 		$this->includes();
 		$this->register_core_processes();
 
 		/**
-		 * Fires during instantiation of the batch processing script.
+		 * Fires during instantiation of the batch processing registry.
 		 *
 		 * @since 2.0
 		 *
@@ -122,6 +122,11 @@ class Registry {
 			'file'  => AFFILIATEWP_PLUGIN_DIR . 'includes/admin/tools/export/class-batch-generate-payouts.php',
 		) );
 
+		// Recount all affiliate stats.
+		$this->register_process( 'recount-affiliate-stats', array(
+			'class' => 'AffWP\Utils\Batch_Process\Recount_Affiliate_Stats',
+			'file'  => AFFILIATEWP_PLUGIN_DIR . 'includes/admin/tools/class-batch-recount-affiliate-stats.php',
+		) );
 	}
 
 	/**
@@ -143,11 +148,16 @@ class Registry {
 		$process_args = wp_parse_args( $process_args,  array_fill_keys( array( 'class', 'file' ), '' ) );
 
 		if ( empty( $process_args['class'] ) ) {
-			return new \WP_Error( 'invalid_batch_class', __( 'A batch process class must be specified', 'affiliate-wp' ) );
+			return new \WP_Error( 'invalid_batch_class', __( 'A batch process class must be specified.', 'affiliate-wp' ) );
 		}
 
-		if ( empty( $process_args['file'] ) || 0 !== validate_file( $process_args['file'] ) ) {
-			return new \WP_Error( 'invalid_batch_class_file', __( 'An invalid class handler file has been supplied.', 'affiliate-wp' ) );
+		if ( empty( $process_args['file'] ) ) {
+			return new \WP_Error( 'missing_batch_class_file', __( 'No batch class handler file has been supplied.', 'affiliate-wp' ) );
+		}
+
+		// 2 if Windows path.
+		if ( ! in_array( validate_file( $process_args['file'] ), array( 0, 2 ), true ) ) {
+			return new \WP_Error( 'invalid_batch_class_file', __( 'An invalid batch class handler file has been supplied.', 'affiliate-wp' ) );
 		}
 
 		return $this->add_process( $batch_id, $process_args );
