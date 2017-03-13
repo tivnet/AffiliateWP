@@ -85,6 +85,5 @@ class CSV extends Batch\Import implements Importer\CSV {
 	public function map_fields( $import_fields = array() ) {
 		$this->field_mapping = $import_fields;
 	}
-a
 
 }
