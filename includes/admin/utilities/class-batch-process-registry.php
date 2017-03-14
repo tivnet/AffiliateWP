@@ -58,6 +58,10 @@ class Registry {
 		// Exporters bootstrap.
 		require_once AFFILIATEWP_PLUGIN_DIR . 'includes/interfaces/interface-base-exporter.php';
 		require_once AFFILIATEWP_PLUGIN_DIR . 'includes/interfaces/interface-csv-exporter.php';
+
+		// Importer / Exporter needed files.
+		require_once AFFILIATEWP_PLUGIN_DIR . 'includes/admin/tools/import/class-batch-import.php';
+		require_once AFFILIATEWP_PLUGIN_DIR . 'includes/admin/tools/import/class-batch-import-csv.php';
 		require_once AFFILIATEWP_PLUGIN_DIR . 'includes/admin/tools/export/class-batch-export.php';
 		require_once AFFILIATEWP_PLUGIN_DIR . 'includes/admin/tools/export/class-batch-export-csv.php';
 	}
