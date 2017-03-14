@@ -115,7 +115,13 @@ function affwp_enqueue_admin_js() {
 
 	$suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
 
-	wp_enqueue_script( 'affwp-admin', AFFILIATEWP_PLUGIN_URL . 'assets/js/admin' . $suffix . '.js', array( 'jquery', 'jquery-ui-autocomplete'  ), AFFILIATEWP_VERSION );
+	$admin_deps = array( 'jquery', 'jquery-ui-autocomplete', 'jquery-form' );
+
+	if ( affwp_is_admin_page( 'affiliate-wp-tools' ) ) {
+		$admin_deps[] = 'jquery-form';
+	}
+
+	wp_enqueue_script( 'affwp-admin', AFFILIATEWP_PLUGIN_URL . 'assets/js/admin' . $suffix . '.js', $admin_deps, AFFILIATEWP_VERSION );
 	wp_localize_script( 'affwp-admin', 'affwp_vars', array(
 		'post_id'                 => isset( $post->ID ) ? $post->ID : null,
 		'affwp_version'           => AFFILIATEWP_VERSION,
