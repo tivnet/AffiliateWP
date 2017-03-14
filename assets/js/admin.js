@@ -246,9 +246,9 @@ jQuery(document).ready(function($) {
 				} else {
 
 					var import_form = $( '.affwp-import-form' ).find( '.affwp-batch-progress' ).parent().parent();
-					var notice_wrap = import_form.find('.notice-wrap');
+					var notice_wrap = import_form.find( '.notice-wrap' );
 
-					import_form.find('.button-disabled').removeClass('button-disabled');
+					import_form.find( '.button-disabled' ).removeClass( 'button-disabled' );
 
 					// Error for older unsupported browsers that doesn't support HTML5 File API.
 					notice_wrap.html('<div class="update error"><p>' + affwp_vars.unsupported_browser + '</p></div>');
