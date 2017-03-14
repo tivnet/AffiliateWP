@@ -3,7 +3,7 @@
 /**
  * Base importer class.
  *
- * @since 2.0
+ * @since 2.1
  */
 class Affiliate_WP_Import {
 

@@ -23,11 +23,11 @@ class Import extends \Affiliate_WP_Import {
 	/**
 	 * The file the export data will be stored in.
 	 *
-	 * @access protected
+	 * @access public
 	 * @since  2.1
 	 * @var    resource
 	 */
-	protected $file;
+	public $file;
 
 	/**
 	 * The current step being processed.
