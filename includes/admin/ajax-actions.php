@@ -160,6 +160,12 @@ function affwp_process_batch_request() {
 	} else {
 		$response_data = array( 'step' => $step );
 
+		// Map fields if this is an import.
+		if ( isset( $process->field_mapping ) && ( $process instanceof \AffWP\Utils\Importer\CSV ) ) {
+			$response_data['columns'] = array_keys( $process->get_csv_cols() );
+			$response_data['mapping'] = $process->field_mapping;
+		}
+
 		// Finish and set the status flag if done.
 		if ( 'done' === $step ) {
 			$response_data['done'] = true;
