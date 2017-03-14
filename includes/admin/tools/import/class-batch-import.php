@@ -1,6 +1,10 @@
 <?php
 namespace AffWP\Utils\Batch_Process;
 
+if ( ! class_exists( '\Affiliate_WP_Import' ) ) {
+	require_once AFFILIATEWP_PLUGIN_DIR . 'includes/admin/tools/import/class-import.php';
+}
+
 /**
  * Implements the base batch importer as an intermediary between a batch process
  * and the base importer class.
