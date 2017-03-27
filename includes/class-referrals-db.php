@@ -144,6 +144,10 @@ class Affiliate_WP_Referrals_DB extends Affiliate_WP_DB  {
 			$args['products'] = maybe_serialize( $args['products'] );
 		}
 
+		if ( ! empty( $args['custom'] ) ) {
+			$args['custom']	 = maybe_serialize( $args['custom'] );
+		}
+
 		$add  = $this->insert( $args, 'referral' );
 
 		if ( $add ) {
