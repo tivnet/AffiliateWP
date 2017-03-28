@@ -101,6 +101,8 @@ class Tests extends UnitTestCase {
 
 	/**
 	 * @covers ::affwp_get_affiliate_id()
+	 *
+	 * See test-affiliate-functions-admin.php for tests with constants.
 	 */
 	public function test_get_affiliate_id_with_invalid_user_should_return_false() {
 		$this->assertFalse( affwp_get_affiliate_id() );
@@ -108,9 +110,58 @@ class Tests extends UnitTestCase {
 
 	/**
 	 * @covers ::affwp_get_affiliate_id()
+	 *
+	 * See test-affiliate-functions-admin.php for tests with constants.
 	 */
 	public function test_get_affiliate_id_with_real_user_should_return_a_real_affiliate_id() {
 		$this->assertEquals( self::$affiliates[0], affwp_get_affiliate_id( self::$users[0] ) );
+	}
+
+	/**
+	 * @covers ::affwp_get_affiliate_id()
+	 *
+	 * See test-affiliate-functions-admin.php for tests with constants.
+	 */
+	public function test_get_affiliate_id_with_empty_user_id_and_logged_in_affiliate_user_should_return_that_affiliate_id() {
+		wp_set_current_user( self::$users[1] );
+
+		$this->assertEquals( self::$affiliates[1], affwp_get_affiliate_id() );
+
+		// Clean up.
+		wp_set_current_user( 0 );
+	}
+
+	/**
+	 * @covers ::affwp_get_affiliate_id()
+	 * @preserveGlobalState disabled
+	 */
+	public function test_get_affiliate_id_in_admin_with_user_id_empty_should_ignore_the_current_user() {
+		// Force is_admin() true.
+		set_current_screen( 'admin.php' );
+		$this->assertTrue( is_admin() );
+
+		wp_set_current_user( self::$users[1] );
+
+		$this->assertFalse( affwp_get_affiliate_id() );
+
+		// Clean up.
+		wp_set_current_user( 0 );
+		set_current_screen( 'front' );
+	}
+
+	/**
+	 * @covers ::affwp_get_affiliate_id()
+	 * @preserveGlobalState disabled
+	 */
+	public function test_get_affiliate_id_doing_ajax_with_user_id_empty_should_ignore_the_current_user() {
+		define( 'DOING_AJAX', true );
+
+		wp_set_current_user( self::$users[1] );
+
+		$this->assertFalse( affwp_get_affiliate_id() );
+
+		// Clean up.
+		wp_set_current_user( 0 );
 	}
 
 	/**
@@ -1439,6 +1490,29 @@ class Tests extends UnitTestCase {
 	 */
 	public function test_get_affiliate_campaigns_with_valid_affiliate_object_should_return_campaigns() {
 
+	}
+
+	/**
+	 * @covers ::affwp_get_affiliate_campaigns()
+	 */
+	public function test_get_affiliate_campaigns_should_return_up_to_100_by_default() {
+		// Create 100 campaigns.
+		for ( $i = 0; $i <= 99; $i++ ) {
+			$campaign = rand_str( 20 );
+
+			$visits[] = $this->factory->visit->create( array(
+				'affiliate_id' => self::$affiliates[0],
+				'campaign'     => $campaign,
+				'url'          => WP_TESTS_DOMAIN . '/' . $campaign
+			) );
+		}
+
+		$this->assertSame( 100, count( affwp_get_affiliate_campaigns( self::$affiliates[0] ) ) );
+
+		// Clean up.
+		foreach ( $visits as $visit_id ) {
+			affwp_delete_visit( $visit_id );
+		}
 	}
 
 	/**

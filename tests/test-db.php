@@ -148,4 +148,22 @@ class Tests extends UnitTestCase {
 	}
 
 
+	/**
+	 * @covers \Affiliate_WP_DB::get_by()
+	 */
+	public function test_get_by_with_empty_column_should_return_false() {
+		$db = $this->getMockForAbstractClass( 'Affiliate_WP_DB' );
+
+		$this->assertFalse( $db->get_by( '', 100 ) );
+	}
+
+	/**
+	 * @covers \Affiliate_WP_DB::get_by()
+	 */
+	public function test_get_by_with_empty_row_id_should_return_false() {
+		$db = $this->getMockForAbstractClass( 'Affiliate_WP_DB' );
+
+		$this->assertFalse( $db->get_by( 'affiliate_id', '' ) );
+	}
+
 }
