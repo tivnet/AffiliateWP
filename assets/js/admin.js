@@ -206,12 +206,14 @@ jQuery(document).ready(function($) {
 		postboxes.add_postbox_toggles( pagenow );
 	}
 
+	var AffWP_Batch, AffWP_Batch_Import;
+
 	/**
 	 * Batch Processor.
 	 *
 	 * @since 2.0
 	 */
-	var AffWP_Batch = {
+	AffWP_Batch = {
 
 		init : function() {
 			this.submit();
@@ -350,25 +352,29 @@ jQuery(document).ready(function($) {
 
 	AffWP_Batch.init();
 
-	var AffWP_Batch_Import = Object.create( AffWP_Batch );
+	AffWP_Batch_Import = $.extend( {}, AffWP_Batch, {
 
-	AffWP_Batch_Import.submit = function() {
-		var	self = this,
-			form = $( '.affwp-batch-import-form' );
+		submit: function() {
+			var	self = this,
+				form = $( '.affwp-batch-import-form' );
 
-		form.ajaxForm( {
-			beforeSubmit: self.before_submit,
-			complete:     self.complete,
-			dataType:     'json',
-			error:        self.error
-		} );
+			form.ajaxForm( {
+				beforeSubmit: self.before_submit,
+				complete:     self.complete,
+				dataType:     'json',
+				error:        self.error,
+				data:         {
+					action:   'process_batch_import',
+					batch_id: form.data( 'batch_id' ),
+					nonce:    form.data( 'nonce' )
+				},
+				url:          ajaxurl
+			} );
+		},
 
-	}
+		before_submit: function( arr, $form, options ) {
+			var $form = $( '.affwp-batch-import-form' );
 
-	AffWP_Batch_Import.before_submit = function( arr, $form, options ) {
-		var $form = $( '.affwp-batch-form' );
-
-		// if ( is import process ) {
 			$form.find('.notice-wrap').remove();
 			$form.append( '<div class="notice-wrap"><span class="spinner is-active"></span><div class="affwp-batch-progress"><div></div></div></div>' );
 
@@ -379,7 +385,7 @@ jQuery(document).ready(function($) {
 
 			} else {
 
-				var import_form = $( '.affwp-import-form' ).find( '.affwp-batch-progress' ).parent().parent();
+				var import_form = $( '.affwp-batch-import-form' ).find( '.affwp-batch-progress' ).parent().parent();
 				var notice_wrap = import_form.find( '.notice-wrap' );
 
 				import_form.find( '.button-disabled' ).removeClass( 'button-disabled' );
@@ -389,98 +395,103 @@ jQuery(document).ready(function($) {
 				return false;
 
 			}
-		// }
 
-	}
+		},
 
-	AffWP_Batch_Import.success = function( responseText, statusText, xhr, $form ) {}
+		success: function( responseText, statusText, xhr, $form ) {
+			console.log( $form );
+		},
 
-	AffWP_Batch_Import.complete = function( xhr ) {
-		var	response = jQuery.parseJSON( xhr.responseText ),
-			self     = this;
+		complete: function( xhr ) {
 
-		if( response.success /* && form is import */ ) {
+			var	response = jQuery.parseJSON( xhr.responseText ),
+				self     = this;
 
-			var $form = $( '.affwp-batch-form' );
+			if( response.success ) {
 
-			$form.find( '.affwp-import-file-wrap, .notice-wrap' ).remove();
-			$form.find( '.affwp-import-options' ).slideDown();
+				var $form = $( '.affwp-batch-import-form' );
 
-			// Show column mapping
-			var select  = $form.find( 'select.affwp-import-csv-column' );
-			var row     = select.parent().parent();
-			var options = '';
+				$form.find( '.affwp-import-file-wrap, .notice-wrap' ).remove();
+				$form.find( '.affwp-import-options' ).slideDown();
 
-			var columns = response.data.columns.sort(function(a,b) {
-				if( a < b ) return -1;
-				if( a > b ) return 1;
-				return 0;
-			});
+				// Show column mapping
+				var select  = $form.find( 'select.affwp-import-csv-column' );
+				var row     = select.parent().parent();
+				var options = '';
 
-			$.each( columns, function( key, value ) {
-				options += '<option value="' + value + '">' + value + '</option>';
-			});
+				var columns = response.data.columns.sort(function(a,b) {
+					if( a < b ) return -1;
+					if( a > b ) return 1;
+					return 0;
+				});
 
-			select.append( options );
+				$.each( columns, function( key, value ) {
+					options += '<option value="' + value + '">' + value + '</option>';
+				});
 
-			select.on( 'change', function() {
-				var $key = $(this).val();
+				select.append( options );
 
-				if( ! $key ) {
+				select.on( 'change', function() {
+					var $key = $(this).val();
 
-					$(this).parent().next().html( '' );
+					if( ! $key ) {
 
-				} else {
-
-					if( false != response.data.first_row[$key] ) {
-						$(this).parent().next().html( response.data.first_row[$key] );
-					} else {
 						$(this).parent().next().html( '' );
+
+					} else {
+
+						if( false != response.data.first_row[$key] ) {
+							$(this).parent().next().html( response.data.first_row[$key] );
+						} else {
+							$(this).parent().next().html( '' );
+						}
+
 					}
 
-				}
+				});
 
-			});
+				$('body').on( 'click', '.affwp-import-proceed', function( event ) {
 
-			$('body').on( 'click', '.affwp-import-proceed', function( event ) {
+					event.preventDefault();
 
-				event.preventDefault();
+					$form.append( '<div class="notice-wrap"><span class="spinner is-active"></span><div class="affwp-batch-progress"><div></div></div></div>' );
 
-				$form.append( '<div class="notice-wrap"><span class="spinner is-active"></span><div class="affwp-batch-progress"><div></div></div></div>' );
+					response.data.mapping = $form.serialize();
 
-				response.data.mapping = $form.serialize();
+					self.process_step( 1, response.data, self );
+				});
 
-				self.process_step( 1, response.data, self );
-			});
+			} else {
 
-		} else {
+				self.error( xhr );
 
-			self.error( xhr );
+			}
 
+		},
+
+		error: function( xhr ) {
+
+			// Something went wrong. This will display error on form
+			var	response    = jQuery.parseJSON( xhr.responseText ),
+				import_form = $( '.affwp-batch-import-form' ).find( '.affwp-batch-progress' ).parent().parent(),
+				notice_wrap = import_form.find( '.notice-wrap' ),
+				self        = this;
+
+			import_form.find( '.button-disabled' ).removeClass( 'button-disabled' );
+
+			if ( response.data.error ) {
+
+				notice_wrap.html('<div class="update error"><p>' + response.data.error + '</p></div>');
+
+			} else {
+
+				notice_wrap.remove();
+
+			}
 		}
 
-	}
 
-	AffWP_Batch_Import.error = function( xhr ) {
-		// Something went wrong. This will display error on form
-
-		var	response    = jQuery.parseJSON( xhr.responseText ),
-			import_form = $( '.affwp-import-form' ).find( '.affwp-batch-progress' ).parent().parent(),
-			notice_wrap = import_form.find( '.notice-wrap' ),
-			self        = this;
-
-		import_form.find( '.button-disabled' ).removeClass( 'button-disabled' );
-
-		if ( response.data.error ) {
-
-			notice_wrap.html('<div class="update error"><p>' + response.data.error + '</p></div>');
-
-		} else {
-
-			notice_wrap.remove();
-
-		}
-	}
+	} );
 
 	AffWP_Batch_Import.init();
 
