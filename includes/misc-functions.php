@@ -1032,3 +1032,18 @@ function affwp_get_completed_upgrades() {
 
 	return $completed_upgrades;
 }
+
+/**
+ * Modifies the allowed mime types for uploads to include CSV.
+ *
+ * @since 2.1
+ *
+ * @param array $mime_types List of allowed mime types.
+ * @return array Filtered list of allowed mime types.
+ */
+function affwp_allowed_mime_types( $mime_types = array() ) {
+	$mime_types['csv']  = 'text/csv';
+
+	return $mime_types;
+}
+add_filter( 'upload_mimes', 'affwp_allowed_mime_types' );
