@@ -115,7 +115,7 @@ function affwp_enqueue_admin_js() {
 
 	$suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
 
-	$admin_deps = array( 'jquery', 'jquery-ui-autocomplete', 'jquery-form' );
+	$admin_deps = array( 'jquery', 'jquery-ui-autocomplete' );
 
 	if ( affwp_is_admin_page( 'affiliate-wp-tools' ) ) {
 		$admin_deps[] = 'jquery-form';
