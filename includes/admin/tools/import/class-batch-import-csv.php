@@ -56,7 +56,10 @@ class CSV extends Batch\Import implements Importer\CSV {
 			require_once AFFILIATEWP_PLUGIN_DIR . 'includes/libraries/parsecsv.lib.php';
 		}
 
-		$this->csv = new parseCSV();
+		$this->step = $_step;
+		$this->file = $_file;
+		$this->done = false;
+		$this->csv = new \parseCSV();
 		$this->csv->auto( $this->file );
 
 		$this->total = count( $this->csv->data );
