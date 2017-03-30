@@ -114,6 +114,14 @@ class Registry extends Utils\Registry {
 		) );
 
 		//
+		// Importers
+		//
+		$this->register_process( 'import-affiliates', array(
+			'class' => 'AffWP\Utils\Batch_Process\Import_Affiliates',
+			'file'  => AFFILIATEWP_PLUGIN_DIR . 'includes/admin/tools/import/class-batch-import-affiliates.php',
+		) );
+
+		//
 		// Other stuff.
 		//
 
