@@ -282,6 +282,8 @@ jQuery(document).ready(function($) {
 		 */
 		process_step : function( step, data, self ) {
 
+			var self = this;
+
 			$.ajax({
 				type: 'POST',
 				url: ajaxurl,
@@ -290,7 +292,8 @@ jQuery(document).ready(function($) {
 					action: 'process_batch_request',
 					nonce: data.nonce,
 					form: data.form,
-					step: step
+					step: step,
+					data: data
 				},
 				dataType: "json",
 				success: function( response ) {
@@ -373,6 +376,8 @@ jQuery(document).ready(function($) {
 		},
 
 		before_submit: function( arr, $form, options ) {
+			var self = this;
+
 			var $form = $( '.affwp-batch-import-form' );
 
 			$form.find('.notice-wrap').remove();
@@ -457,8 +462,9 @@ jQuery(document).ready(function($) {
 					$form.append( '<div class="notice-wrap"><span class="spinner is-active"></span><div class="affwp-batch-progress"><div></div></div></div>' );
 
 					response.data.mapping = $form.serialize();
+					response.data.form = $form.serializeAssoc();
 
-					self.process_step( 1, response.data, self );
+					AffWP_Batch.process_step( 1, response.data, self );
 				});
 
 			} else {
