@@ -68,16 +68,6 @@ class CSV extends Batch\Import implements Importer\CSV {
 	}
 
 	/**
-	 * Processes a single step (batch).
-	 *
-	 * @access public
-	 * @since  2.1
-	 */
-	public function process_step() {
-
-	}
-
-	/**
 	 * Maps CSV columns to their corresponding import fields.
 	 *
 	 * @access public
@@ -87,6 +77,27 @@ class CSV extends Batch\Import implements Importer\CSV {
 	 */
 	public function map_fields( $import_fields = array() ) {
 		$this->field_mapping = $import_fields;
+	}
+
+	/**
+	 * Retrieves the CSV columns.
+	 *
+	 * @access public
+	 * @since  2.1
+	 *
+	 * @return array The columns in the CSV.
+	 */
+	public function get_columns() {
+		return $this->csv->titles;
+	}
+
+	public function map_row( $core_fields, $csv_row ) {
+		foreach ( $core_fields as $key => $field ) {
+			if ( ! empty( $this->field_mapping[ $key ] ) && ! empty( $csv_row[ $this->field_mapping[ $key ] ] ) ) {
+				$core_fields[ $key ] = $csv_row[ $this->field_mapping[ $key ] ];
+			}
+		}
+		return $core_fields;
 	}
 
 	/**

@@ -386,7 +386,6 @@ function affwp_export_import_tab() {
 					<p><?php esc_html_e( 'Import a CSV of affiliate records.', 'affiliate-wp' ); ?></p>
 					<form method="post" enctype="multipart/form-data" class="affwp-batch-import-form" data-batch_id="import-affiliates" data-nonce=""<?php echo esc_attr( wp_create_nonce( 'import-affiliates_step_nonce' ) ); ?>">
 						<div class="affwp-import-file-wrap">
-							<input type="hidden" name="edd-import-class" value="EDD_Batch_Downloads_Import"/>
 							<p>
 								<input name="affwp-import-file" id="affwp-import-affiliates-file" type="file" />
 							</p>

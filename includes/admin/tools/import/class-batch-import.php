@@ -73,16 +73,12 @@ class Import extends \Affiliate_WP_Import {
 	}
 
 	/**
-	 * Retrieves the CSV columns.
+	 * Processes a single step (batch).
 	 *
 	 * @access public
 	 * @since  2.1
-	 *
-	 * @return array The columns in the CSV.
 	 */
-	public function get_columns() {
-		return $this->csv->titles;
-	}
+	public function process_step() {}
 
 	/**
 	 * Retrieves the first row of the CSV.
@@ -121,6 +117,18 @@ class Import extends \Affiliate_WP_Import {
 	}
 
 	/**
+	 * Calculates and retrieves the offset for the current step.
+	 *
+	 * @access public
+	 * @since  2.1
+	 *
+	 * @return int Number of items to offset.
+	 */
+	public function get_offset() {
+		return ( $this->step - 1 ) * $this->per_step;
+	}
+
+	/**
 	 * Retrieves the calculated completion percentage.
 	 *
 	 * @access public
@@ -151,7 +159,6 @@ class Import extends \Affiliate_WP_Import {
 	 *
 	 * @access public
 	 * @since  2.0
-	 * @abstract
 	 */
 	public function finish() {
 		$this->delete_counts();

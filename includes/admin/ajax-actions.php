@@ -173,7 +173,7 @@ function affwp_process_batch_request() {
 
 		// Map fields if this is an import.
 		if ( isset( $process->field_mapping ) && ( $process instanceof \AffWP\Utils\Importer\CSV ) ) {
-			$response_data['columns'] = array_keys( $process->get_csv_cols() );
+			$response_data['columns'] = $process->get_columns();
 			$response_data['mapping'] = $process->field_mapping;
 		}
 
@@ -301,11 +301,11 @@ function affwp_process_batch_import() {
 		}
 
 		wp_send_json_success( array(
-			'form'      => $_REQUEST,
+			'batch_id'  => $batch_id,
 			'upload'    => $import_file,
 			'first_row' => $import->get_first_row(),
 			'columns'   => $import->get_columns(),
-			'nonce'     => wp_create_nonce( 'affwp_ajax_import', 'affwp_ajax_import_nonce' )
+			'nonce'     => wp_create_nonce( "{$batch_id}_step_nonce" )
 		) );
 
 	} else {
