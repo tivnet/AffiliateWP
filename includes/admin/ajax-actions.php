@@ -139,7 +139,18 @@ function affwp_process_batch_request() {
 	 *
 	 * @var \AffWP\Utils\Batch_Process\Export|\AffWP\Utils\Batch_Process\Base $process
 	 */
-	$process = new $class( $step );
+	if ( isset( $_REQUEST['data']['upload']['file'] ) ) {
+
+		// If this is an import, instantiate with the file and step.
+		$file = sanitize_text_field( $_REQUEST['data']['upload']['file'] );
+		$process = new $class( $file, $step );
+
+	} else {
+
+		// Otherwise just the step.
+		$process = new $class( $step );
+
+	}
 
 	$using_prefetch = ( $process instanceof \AffWP\Utils\Batch_Process\With_PreFetch );
 
