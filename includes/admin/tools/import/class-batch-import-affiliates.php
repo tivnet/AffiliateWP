@@ -348,6 +348,12 @@ class Import_Affiliates extends Batch\Import\CSV implements Batch\With_PreFetch 
 		// Invalidate the affiliates cache.
 		wp_cache_set( 'last_changed', microtime(), 'affiliates' );
 
+		// Pre-fetch.
+		affiliate_wp()->utils->data->delete( "{$this->batch_id}_affiliate_user_ids" );
+
+		// Running count (the "real" count).
+		affiliate_wp()->utils->data->delete( "{$this->batch_id}_running_count" );
+
 		parent::finish();
 	}
 
