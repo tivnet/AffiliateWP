@@ -87,6 +87,17 @@ class Import_Affiliates extends Batch\Import\CSV implements Batch\With_PreFetch 
 		if ( false === $total_to_import  ) {
 			$this->set_total_count( absint( $this->total ) );
 		}
+
+		$all_affiliate_user_ids = affiliate_wp()->utils->data->get( "{$this->batch_id}_affiliate_user_ids", array() );
+
+		if ( false === $all_affiliate_user_ids ) {
+			$user_ids = affiliate_wp()->affiliates->get_affiliates( array(
+				'number' => -1,
+				'fields' => 'user_id'
+			) );
+
+			affiliate_wp()->utils->data->write( "{$this->batch_id}_affiliate_user_ids", $user_ids );
+		}
 	}
 
 	/**
