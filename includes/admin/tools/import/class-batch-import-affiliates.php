@@ -129,12 +129,19 @@ class Import_Affiliates extends Batch\Import\CSV implements Batch\With_PreFetch 
 			foreach ( $data as $key => $row ) {
 				$args = $this->map_row( $row );
 
-				if ( empty( $args['payment_email'] ) ) {
+				if ( empty( $args['email'] ) ) {
 					continue;
 				}
 
-				if ( $user_id = $this->create_user( $args ) ) {
+				$user_id = $this->create_user( $args );
+
+				if ( $user_id ) {
 					$args['user_id'] = $user_id;
+				} else {
+					continue;
+				}
+
+				$args['user_id'] = $user_id;
 
 				if ( false !== affwp_add_affiliate( $args ) ) {
 					$running_count++;
@@ -249,39 +256,86 @@ class Import_Affiliates extends Batch\Import\CSV implements Batch\With_PreFetch 
 	 * @return int|false User ID if a user was found or derived, otherwise false.
 	 */
 	protected function create_user( $args ) {
-		$user = get_user_by( 'email', $args['payment_email'] );
+		$affiliate_user_ids = affiliate_wp()->utils->data->get( "{$this->batch_id}_affiliate_user_ids", array() );
 
-		if ( $user ) {
-			if ( affiliate_wp()->affiliates->get_by( 'user_id', $user->ID ) ) {
-				return false;
-			} else {
-				return $user->ID;
-			}
-		} else {
-			$first_name = $last_name = '';
+		$defaults = array_fill_keys( array( 'user_login', 'email' ), '' );
+		$args     = wp_parse_args( $args, $defaults );
 
-			if ( ! empty( $args['first_name'] ) ) {
-				$first_name = sanitize_text_field( $args['first_name'] );
-			}
+		$user_id = $this->get_user_from_args( $args );
 
-			if ( ! empty( $args['last_name'] ) ) {
-				$last_name = sanitize_text_field( $args['last_name'] );
-			}
-
-			$user_id = wp_insert_user( array(
-				'user_login' => sanitize_user( $args['payment_email'], $this->use_strict ),
-				'user_email' => sanitize_email( $args['payment_email'] ),
-				'user_pass'  => wp_generate_password( 20, false ),
-				'first_name' => $first_name,
-				'last_name'  => $last_name,
-			) );
-
-			if ( ! is_wp_error( $user_id ) ) {
+		if ( $user_id ) {
+			if ( ! in_array( $user_id, $affiliate_user_ids, true ) ) {
 				return $user_id;
 			} else {
 				return false;
 			}
 		}
+
+		if ( ! empty( $args['user_login'] ) ) {
+			$user_login = $args['user_login'];
+		} else {
+			$user_login = $this->generate_login_from_email( $args['email'] );
+		}
+
+		$user_id = wp_insert_user( array(
+			'user_login' => sanitize_user( $user_login, $this->use_strict ),
+			'user_email' => sanitize_text_field( $args['email'] ),
+			'user_pass'  => wp_generate_password( 20, false ),
+			'first_name' => ! empty( $args['first_name'] ) ? sanitize_text_field( $args['first_name'] ) : '',
+			'last_name'  => ! empty( $args['last_name'] ) ? sanitize_text_field( $args['last_name'] ) : '',
+		) );
+
+		if ( ! is_wp_error( $user_id ) ) {
+			return $user_id;
+		} else {
+			return false;
+		}
+	}
+
+	/**
+	 * Gets a user ID from a set of mapped affiliate arguments.
+	 *
+	 * @access protected
+	 * @since  2.1
+	 *
+	 * @param array $args Affiliate arguments.
+	 * @return int|false A derived user ID, otherwise false.
+	 */
+	protected function get_user_from_args( $args ) {
+
+		if ( $user = get_user_by( 'login', $args['user_login'] ) && affwp_is_affiliate( $user->ID ) ) {
+			$user_id = $user->ID;
+		} elseif ( $user = get_user_by( 'email', $args['email'] ) ) {
+			$user_id = $user->ID;
+		} else {
+			$user_id = false;
+		}
+
+		return $user_id;
+	}
+
+	/**
+	 * Generates a username from a given email address.
+	 *
+	 * @access protected
+	 * @since  2.1
+	 *
+	 * @param string $email Email to use for generating a unique username.
+	 * @return string Generated username.
+	 */
+	protected function generate_login_from_email( $email ) {
+
+		$number = rand( 321, 123456 );
+
+		preg_match( '/[^@]*/', $email, $matches );
+
+		if ( isset( $matches[0] ) ) {
+			$user_login = "{$matches[0]}{$number}";
+		} else {
+			$user_login = "affiliate{$number}";
+		}
+
+		return $user_login;
 	}
 
 	/**
