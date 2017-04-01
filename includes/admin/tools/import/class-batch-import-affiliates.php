@@ -114,7 +114,7 @@ class Import_Affiliates extends Batch\Import\CSV implements Batch\With_PreFetch 
 		}
 
 		$current_count = $this->get_current_count();
-		$running_count = 0;
+		$running_count = $this->get_running_count();
 		$offset        = $this->get_offset();
 
 		if ( $offset >= $this->total ) {
@@ -138,16 +138,46 @@ class Import_Affiliates extends Batch\Import\CSV implements Batch\With_PreFetch 
 				if ( $user_id = $this->create_user( $args ) ) {
 					$args['user_id'] = $user_id;
 
-					if ( false !== affwp_add_affiliate( $args ) ) {
-						$running_count ++;
-					}
+				if ( false !== affwp_add_affiliate( $args ) ) {
+					$running_count++;
 				}
 			}
 		}
 
-		$this->set_current_count( $current_count + absint( $running_count ) );
+		$this->set_current_count( $current_count + $this->per_step );
+		$this->set_running_count( $running_count + $running_count );
 
 		return ++$this->step;
+	}
+
+	/**
+	 * Sets the running count in the temporary data store.
+	 *
+	 * The "running" count differs from the "current" count because the current count is used
+	 * to calculate the percentage and keep the progress bar moving, whereas the running count
+	 * is the actual number of items processed.
+	 *
+	 * @access public
+	 * @since  2.1
+	 *
+	 * @param int $count Running count.
+	 */
+	public function set_running_count( $count ) {
+		affiliate_wp()->utils->data->write( "{$this->batch_id}_running_count", $count );
+	}
+
+	/**
+	 * Retrieves the running count from the temporary data store.
+	 *
+	 * @access public
+	 * @since  2.1
+	 *
+	 * @see set_running_count()
+	 *
+	 * @return int Running count of processed affiliates.
+	 */
+	public function get_running_count() {
+		return affiliate_wp()->utils->data->get( "{$this->batch_id}_running_count", 0 );
 	}
 
 	/**
@@ -176,7 +206,9 @@ class Import_Affiliates extends Batch\Import\CSV implements Batch\With_PreFetch 
 		switch( $code ) {
 
 			case 'done':
-				$final_count = $this->get_current_count();
+				$final_count = $this->get_running_count();
+				$total_count = $this->get_total_count();
+				$skipped     = $final_count < $total_count ? $total_count - $final_count : 0;
 
 				$message = sprintf(
 					_n(
@@ -186,6 +218,17 @@ class Import_Affiliates extends Batch\Import\CSV implements Batch\With_PreFetch 
 						'affiliate-wp'
 					), number_format_i18n( $final_count )
 				);
+
+				if ( $skipped > 0 ) {
+					$message .= sprintf( ' ' .
+						_n(
+							'%s existing affiliate or invalid row was skipped.',
+							'%s existing affiliates or invalid rows were skipped.',
+							$skipped,
+							'affiliate-wp'
+						), number_format_i18n( $skipped )
+					);
+				}
 				break;
 
 			default:
