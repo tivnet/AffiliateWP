@@ -121,15 +121,13 @@ class Import_Affiliates extends Batch\Import\CSV implements Batch\With_PreFetch 
 			return 'done';
 		}
 
-		$core_fields = array_keys( $this->get_columns() );
-
 		if ( $this->csv->data ) {
 			$data = $this->csv->data;
 
-			$data = array_slice( $data, $offset, null, true );
+			$data = array_slice( $data, $offset, $this->per_step, true );
 
 			foreach ( $data as $key => $row ) {
-				$args = $this->map_row( $core_fields, $row );
+				$args = $this->map_row( $row );
 
 				if ( empty( $args['payment_email'] ) ) {
 					continue;
