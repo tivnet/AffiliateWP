@@ -117,7 +117,7 @@ class Import_Affiliates extends Batch\Import\CSV implements Batch\With_PreFetch 
 		$running_count = $this->get_running_count();
 		$offset        = $this->get_offset();
 
-		if ( $offset >= $this->total ) {
+		if ( $current_count >= $this->get_total_count() ) {
 			return 'done';
 		}
 

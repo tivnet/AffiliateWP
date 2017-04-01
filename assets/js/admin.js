@@ -300,8 +300,10 @@ jQuery(document).ready(function($) {
 
 					if( response.data.done || response.data.error ) {
 
+						var batchSelector = response.data.mapping ? '.affwp-batch-import-form' : '.affwp-batch-form';
+
 						// We need to get the actual in progress form, not all forms on the page
-						var	batchForm   = $('.affwp-batch-form').find('.affwp-batch-progress').parent().parent(),
+						var	batchForm   = $( batchSelector ),
 							spinner     = batchForm.find( '.spinner' ),
 							notice_wrap = batchForm.find('.notice-wrap');
 
