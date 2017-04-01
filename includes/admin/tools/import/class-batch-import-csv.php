@@ -100,13 +100,39 @@ class CSV extends Batch\Import implements Importer\CSV {
 		return $this->csv->titles;
 	}
 
-	public function map_row( $core_fields, $csv_row ) {
-		foreach ( $core_fields as $key => $field ) {
-			if ( ! empty( $this->field_mapping[ $key ] ) && ! empty( $csv_row[ $this->field_mapping[ $key ] ] ) ) {
-				$core_fields[ $key ] = $csv_row[ $this->field_mapping[ $key ] ];
+	/**
+	 * Maps a single CSV row to the data passed in via init().
+	 *
+	 * @access public
+	 * @since  2.1
+	 *
+	 * @param array $csv_row CSV row data.
+	 * @return array CSV row data mapped to form-defined arguments.
+	 */
+	public function map_row( $csv_row ) {
+		$mapped_row = array();
+
+		foreach ( $this->data as $key => $field ) {
+			if ( ! empty( $this->data[ $key ] ) && ! empty( $csv_row[ $this->data[ $key ] ] ) ) {
+				$mapped_row[ $key ] = $csv_row[ $this->data[ $key ] ];
 			}
 		}
-		return $core_fields;
+
+		return $mapped_row;
+	}
+
+	/**
+	 * Retrieves the first row of the CSV.
+	 *
+	 * This is used for showing an example of what the import will look like.
+	 *
+	 * @access public
+	 * @since  2.1
+	 *
+	 * @return array The first row after the header of the CSV.
+	 */
+	public function get_first_row() {
+		return array_map( array( $this, 'trim_preview' ), current( $this->csv->data ) );
 	}
 
 	/**
@@ -128,47 +154,5 @@ class CSV extends Batch\Import implements Importer\CSV {
 	 * @return void
 	 */
 	public function import() {}
-
-	/**
-	 * Sets the CSV columns.
-	 *
-	 * @access public
-	 * @since  2.1
-	 *
-	 * @return array<string,string> CSV columns.
-	 */
-	public function csv_cols() {}
-
-	/**
-	 * Retrieves the CSV columns array.
-	 *
-	 * Alias for csv_cols(), usually used to implement a filter on the return.
-	 *
-	 * @access public
-	 * @since  2.1
-	 *
-	 * @return array<string,string> CSV columns.
-	 */
-	public function get_csv_cols() {}
-
-	/**
-	 * Outputs the CSV columns.
-	 *
-	 * @access public
-	 * @since  2.1
-	 *
-	 * @return void
-	 */
-	public function csv_cols_out() {}
-
-	/**
-	 * Outputs the CSV rows.
-	 *
-	 * @access public
-	 * @since  2.1
-	 *
-	 * @return void
-	 */
-	public function csv_rows_out() {}
 
 }

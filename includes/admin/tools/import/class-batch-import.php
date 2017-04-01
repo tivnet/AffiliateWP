@@ -81,20 +81,6 @@ class Import extends \Affiliate_WP_Import {
 	public function process_step() {}
 
 	/**
-	 * Retrieves the first row of the CSV.
-	 *
-	 * This is used for showing an example of what the import will look like.
-	 *
-	 * @access public
-	 * @since  2.1
-	 *
-	 * @return array The first row after the header of the CSV.
-	 */
-	public function get_first_row() {
-		return array_map( array( $this, 'trim_preview' ), current( $this->csv->data ) );
-	}
-
-	/**
 	 * Trims a column value for preview.
 	 *
 	 * @access public

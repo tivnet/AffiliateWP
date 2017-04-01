@@ -18,45 +18,46 @@ if ( ! defined( 'ABSPATH' ) ) {
 interface CSV extends Importer\Base {
 
 	/**
-	 * Sets the CSV columns.
+	 * Maps CSV columns to their corresponding import fields.
 	 *
 	 * @access public
 	 * @since  2.1
 	 *
-	 * @return array<string,string> CSV columns.
+	 * @param array $import_fields Import fields to map.
 	 */
-	public function csv_cols();
+	public function map_fields( $import_fields = array() );
 
 	/**
-	 * Retrieves the CSV columns array.
-	 *
-	 * Alias for csv_cols(), usually used to implement a filter on the return.
+	 * Retrieves the CSV columns.
 	 *
 	 * @access public
 	 * @since  2.1
 	 *
-	 * @return array<string,string> CSV columns.
+	 * @return array The columns in the CSV.
 	 */
-	public function get_csv_cols();
+	public function get_columns();
 
 	/**
-	 * Outputs the CSV columns.
+	 * Maps a single CSV row to the data passed in via init().
 	 *
 	 * @access public
 	 * @since  2.1
 	 *
-	 * @return void
+	 * @param array $csv_row CSV row data.
+	 * @return array CSV row data mapped to form-defined arguments.
 	 */
-	public function csv_cols_out();
+	public function map_row( $csv_row );
 
 	/**
-	 * Outputs the CSV rows.
+	 * Retrieves the first row of the CSV.
+	 *
+	 * This is used for showing an example of what the import will look like.
 	 *
 	 * @access public
 	 * @since  2.1
 	 *
-	 * @return void
+	 * @return array The first row after the header of the CSV.
 	 */
-	public function csv_rows_out();
+	public function get_first_row();
 
 }
