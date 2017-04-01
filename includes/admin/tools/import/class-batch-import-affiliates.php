@@ -14,15 +14,6 @@ use AffWP\Utils\Batch_Process as Batch;
 class Import_Affiliates extends Batch\Import\CSV implements Batch\With_PreFetch {
 
 	/**
-	 * Form data passed via Ajax.
-	 *
-	 * @access public
-	 * @since  2.1
-	 * @var    array
-	 */
-	public $data = array();
-
-	/**
 	 * Whether to use 'strict' mode when sanitizing generated usernames.
 	 *
 	 * See {@see 'affwp_batch_import_affiliates_strict_usernames'}.

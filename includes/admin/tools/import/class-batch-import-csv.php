@@ -42,6 +42,15 @@ class CSV extends Batch\Import implements Importer\CSV {
 	public $field_mapping = array();
 
 	/**
+	 * Form data passed via Ajax.
+	 *
+	 * @access public
+	 * @since  2.1
+	 * @var    array
+	 */
+	public $data = array();
+
+	/**
 	 * Instantiates the importer.
 	 *
 	 * @access public
