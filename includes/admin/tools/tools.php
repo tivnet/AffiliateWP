@@ -416,7 +416,25 @@ function affwp_export_import_tab() {
 								</thead>
 								<tbody>
 								<tr>
-									<td><?php esc_html_e( 'First Name', 'affiliate-wp' ); ?></td>
+									<td><?php esc_html_e( 'Email (required)', 'affiliate-wp' ); ?></td>
+									<td>
+										<select name="affwp-import-field[email]" class="affwp-import-csv-column">
+											<option value=""><?php esc_html_e( '- Ignore this field -', 'affiliate-wp' ); ?></option>
+										</select>
+									</td>
+									<td class="affwp-import-preview-field"><?php esc_html_e( '- select field to preview data -', 'affiliate-wp' ); ?></td>
+								</tr>
+								<tr>
+									<td><?php esc_html_e( 'Username (optional)', 'affiliate-wp' ); ?></td>
+									<td>
+										<select name="affwp-import-field[user_login]" class="affwp-import-csv-column">
+											<option value=""><?php esc_html_e( '- Ignore this field -', 'affiliate-wp' ); ?></option>
+										</select>
+									</td>
+									<td class="affwp-import-preview-field"><?php esc_html_e( '- select field to preview data -', 'affiliate-wp' ); ?></td>
+								</tr>
+								<tr>
+									<td><?php esc_html_e( 'First Name (optional)', 'affiliate-wp' ); ?></td>
 									<td>
 										<select name="affwp-import-field[first_name]" class="affwp-import-csv-column">
 											<option value=""><?php esc_html_e( '- Ignore this field -', 'affiliate-wp' ); ?></option>
@@ -425,7 +443,7 @@ function affwp_export_import_tab() {
 									<td class="affwp-import-preview-field"><?php esc_html_e( '- select field to preview data -', 'affiliate-wp' ); ?></td>
 								</tr>
 								<tr class="alternate">
-									<td><?php esc_html_e( 'Last Name', 'affiliate-wp' ); ?></td>
+									<td><?php esc_html_e( 'Last Name (optional)', 'affiliate-wp' ); ?></td>
 									<td>
 										<select name="affwp-import-field[last_name]" class="affwp-import-csv-column">
 											<option value=""><?php esc_html_e( '- Ignore this field -', 'affiliate-wp' ); ?></option>
@@ -433,17 +451,8 @@ function affwp_export_import_tab() {
 									</td>
 									<td class="affwp-import-preview-field"><?php esc_html_e( '- select field to preview data -', 'affiliate-wp' ); ?></td>
 								</tr>
-								<tr>
-									<td><?php esc_html_e( 'Payment/Account Email', 'affiliate-wp' ); ?></td>
-									<td>
-										<select name="affwp-import-field[payment_email]" class="affwp-import-csv-column">
-											<option value=""><?php esc_html_e( '- Ignore this field -', 'affiliate-wp' ); ?></option>
-										</select>
-									</td>
-									<td class="affwp-import-preview-field"><?php esc_html_e( '- select field to preview data -', 'affiliate-wp' ); ?></td>
-								</tr>
 								<tr class="alternate">
-									<td><?php esc_html_e( 'Rate', 'affiliate-wp' ); ?></td>
+									<td><?php esc_html_e( 'Rate (optional)', 'affiliate-wp' ); ?></td>
 									<td>
 										<select name="affwp-import-field[rate]" class="affwp-import-csv-column">
 											<option value=""><?php esc_html_e( '- Ignore this field -', 'affiliate-wp' ); ?></option>
@@ -452,7 +461,7 @@ function affwp_export_import_tab() {
 									<td class="affwp-import-preview-field"><?php esc_html_e( '- select field to preview data -', 'affiliate-wp' ); ?></td>
 								</tr>
 								<tr>
-									<td><?php esc_html_e( 'Rate Type', 'affiliate-wp' ); ?></td>
+									<td><?php esc_html_e( 'Rate Type (optional)', 'affiliate-wp' ); ?></td>
 									<td>
 										<select name="affwp-import-field[rate_type]" class="affwp-import-csv-column">
 											<option value=""><?php esc_html_e( '- Ignore this field -', 'affiliate-wp' ); ?></option>
@@ -461,7 +470,7 @@ function affwp_export_import_tab() {
 									<td class="affwp-import-preview-field"><?php esc_html_e( '- select field to preview data -', 'affiliate-wp' ); ?></td>
 								</tr>
 								<tr class="alternate">
-									<td><?php esc_html_e( 'Earnings', 'affiliate-wp' ); ?></td>
+									<td><?php esc_html_e( 'Earnings (optional)', 'affiliate-wp' ); ?></td>
 									<td>
 										<select name="affwp-import-field[earnings]" class="affwp-import-csv-column">
 											<option value=""><?php esc_html_e( '- Ignore this field -', 'affiliate-wp' ); ?></option>
@@ -470,7 +479,7 @@ function affwp_export_import_tab() {
 									<td class="affwp-import-preview-field"><?php esc_html_e( '- select field to preview data -', 'affiliate-wp' ); ?></td>
 								</tr>
 								<tr>
-									<td><?php esc_html_e( 'Unpaid Earnings', 'affiliate-wp' ); ?></td>
+									<td><?php esc_html_e( 'Unpaid Earnings (optional)', 'affiliate-wp' ); ?></td>
 									<td>
 										<select name="affwp-import-field[unpaid_earnings]" class="affwp-import-csv-column">
 											<option value=""><?php esc_html_e( '- Ignore this field -', 'affiliate-wp' ); ?></option>
@@ -479,7 +488,7 @@ function affwp_export_import_tab() {
 									<td class="affwp-import-preview-field"><?php esc_html_e( '- select field to preview data -', 'affiliate-wp' ); ?></td>
 								</tr>
 								<tr class="alternate">
-									<td><?php esc_html_e( 'Referrals', 'affiliate-wp' ); ?></td>
+									<td><?php esc_html_e( 'Referrals (optional)', 'affiliate-wp' ); ?></td>
 									<td>
 										<select name="affwp-import-field[referrals]" class="affwp-import-csv-column">
 											<option value=""><?php esc_html_e( '- Ignore this field -', 'affiliate-wp' ); ?></option>
@@ -488,7 +497,7 @@ function affwp_export_import_tab() {
 									<td class="affwp-import-preview-field"><?php esc_html_e( '- select field to preview data -', 'affiliate-wp' ); ?></td>
 								</tr>
 								<tr>
-									<td><?php esc_html_e( 'Visits', 'affiliate-wp' ); ?></td>
+									<td><?php esc_html_e( 'Visits (optional)', 'affiliate-wp' ); ?></td>
 									<td>
 										<select name="affwp-import-field[visits]" class="affwp-import-csv-column">
 											<option value=""><?php esc_html_e( '- Ignore this field -', 'affiliate-wp' ); ?></option>
@@ -497,7 +506,7 @@ function affwp_export_import_tab() {
 									<td class="affwp-import-preview-field"><?php esc_html_e( '- select field to preview data -', 'affiliate-wp' ); ?></td>
 								</tr>
 								<tr class="alternate">
-									<td><?php esc_html_e( 'Date Registered', 'affiliate-wp' ); ?></td>
+									<td><?php esc_html_e( 'Date Registered (optional)', 'affiliate-wp' ); ?></td>
 									<td>
 										<select name="affwp-import-field[date_registered]" class="affwp-import-csv-column">
 											<option value=""><?php esc_html_e( '- Ignore this field -', 'affiliate-wp' ); ?></option>
