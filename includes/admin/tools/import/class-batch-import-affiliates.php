@@ -303,7 +303,7 @@ class Import_Affiliates extends Batch\Import\CSV implements Batch\With_PreFetch 
 	 */
 	protected function get_user_from_args( $args ) {
 
-		if ( $user = get_user_by( 'login', $args['user_login'] ) && affwp_is_affiliate( $user->ID ) ) {
+		if ( $user = get_user_by( 'login', $args['user_login'] ) ) {
 			$user_id = $user->ID;
 		} elseif ( $user = get_user_by( 'email', $args['email'] ) ) {
 			$user_id = $user->ID;
