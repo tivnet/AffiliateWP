@@ -122,6 +122,8 @@ class Affiliate_WP_Referrals_DB extends Affiliate_WP_DB  {
 	 * @return int|false Referral ID if successfully added, false otherwise.
 	*/
 	public function add( $data = array() ) {
+affiliate_wp()->utils->log( '$data param in add()' );
+affiliate_wp()->utils->log( print_r( $data ) );
 
 		$defaults = array(
 			'status' => 'pending',
