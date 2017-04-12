@@ -97,7 +97,7 @@ class CSV extends Batch\Import implements Importer\CSV {
 	 * @return array The columns in the CSV.
 	 */
 	public function get_columns() {
-		return $this->csv->titles;
+		return array_values( array_filter( $this->csv->titles ) );
 	}
 
 	/**
