@@ -189,6 +189,10 @@ p.affwp-error {
 	word-wrap: break-word;
 }
 
+#affwp-affiliate-dashboard-creatives code {
+	background: none;
+}
+
 #affwp-affiliate-dashboard-creatives pre,
 #affwp-affiliate-dashboard-creatives code {
 	-webkit-hyphens: none;
