@@ -122,8 +122,6 @@ class Affiliate_WP_Referrals_DB extends Affiliate_WP_DB  {
 	 * @return int|false Referral ID if successfully added, false otherwise.
 	*/
 	public function add( $data = array() ) {
-affiliate_wp()->utils->log( '$data param in add()' );
-affiliate_wp()->utils->log( print_r( $data, true ) );
 
 		$defaults = array(
 			'status' => 'pending',
@@ -131,9 +129,6 @@ affiliate_wp()->utils->log( print_r( $data, true ) );
 		);
 
 		$args = wp_parse_args( $data, $defaults );
-
-affiliate_wp()->utils->log( 'base add() args' );
-affiliate_wp()->utils->log( print_r( $args, true ) );
 
 		if( empty( $args['affiliate_id'] ) ) {
 			return false;
@@ -154,12 +149,6 @@ affiliate_wp()->utils->log( print_r( $args, true ) );
 		}
 
 		$add  = $this->insert( $args, 'referral' );
-
-affiliate_wp()->utils->log( 'insert() args' );
-affiliate_wp()->utils->log( print_r( $args, true ) );
-
-affiliate_wp()->utils->log( 'insert() result' );
-affiliate_wp()->utils->log( var_dump( $add ) );
 
 		if ( $add ) {
 
