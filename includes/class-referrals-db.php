@@ -130,13 +130,16 @@ class Affiliate_WP_Referrals_DB extends Affiliate_WP_DB  {
 
 		$args = wp_parse_args( $data, $defaults );
 
+affiliate_wp()->utils->log( 'base add() args' );
+affiliate_wp()->utils->log( print_r( $args, true ) );
+
 		if( empty( $args['affiliate_id'] ) ) {
 			return false;
 		}
 
-//		if( ! affiliate_wp()->affiliates->affiliate_exists( $args['affiliate_id'] ) ) {
-//			return false;
-//		}
+		if( ! affiliate_wp()->affiliates->affiliate_exists( $args['affiliate_id'] ) ) {
+			return false;
+		}
 
 		$args['amount'] = affwp_sanitize_amount( $args['amount'] );
 
@@ -149,6 +152,12 @@ class Affiliate_WP_Referrals_DB extends Affiliate_WP_DB  {
 		}
 
 		$add  = $this->insert( $args, 'referral' );
+
+affiliate_wp()->utils->log( 'insert() args' );
+affiliate_wp()->utils->log( print_r( $args, true ) );
+
+affiliate_wp()->utils->log( 'insert() result' );
+affiliate_wp()->utils->log( print_r( $args, true ) );
 
 		if ( $add ) {
 
