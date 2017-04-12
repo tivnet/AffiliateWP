@@ -461,6 +461,8 @@ jQuery(document).ready(function($) {
 
 					event.preventDefault();
 
+					$form.find( '.notice-wrap' ).hide();
+
 					$form.append( '<div class="notice-wrap"><span class="spinner is-active"></span><div class="affwp-batch-progress"><div></div></div></div>' );
 
 					response.data.mapping = $form.serialize();
