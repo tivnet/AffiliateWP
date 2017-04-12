@@ -159,7 +159,7 @@ affiliate_wp()->utils->log( 'insert() args' );
 affiliate_wp()->utils->log( print_r( $args, true ) );
 
 affiliate_wp()->utils->log( 'insert() result' );
-affiliate_wp()->utils->log( print_r( $args, true ) );
+affiliate_wp()->utils->log( print_r( $add, true ) );
 
 		if ( $add ) {
 
