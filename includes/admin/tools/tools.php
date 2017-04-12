@@ -400,7 +400,7 @@ function affwp_export_import_tab() {
 							<p>
 								<?php
 								printf(
-									__( 'Each column loaded from the CSV needs to be mapped to an affiliate field. Select the column that should be mapped to each field below. Any columns not needed can be ignored. See <a href="%s" target="_blank">this guide</a> for assistance with importing payment records.', 'affiliate-wp' ),
+									__( 'Each column loaded from the CSV needs to be mapped to an affiliate field. Select the column that should be mapped to each field below. Any columns not needed can be ignored. See <a href="%s" target="_blank">this guide</a> for assistance with importing affiliate records.', 'affiliate-wp' ),
 									''
 								);
 								?>
