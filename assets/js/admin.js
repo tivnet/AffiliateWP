@@ -461,7 +461,7 @@ jQuery(document).ready(function($) {
 
 					event.preventDefault();
 
-					$form.find( '.notice-wrap' ).hide();
+					$form.find( '.notice-wrap' ).remove();
 
 					$form.append( '<div class="notice-wrap"><span class="spinner is-active"></span><div class="affwp-batch-progress"><div></div></div></div>' );
 
