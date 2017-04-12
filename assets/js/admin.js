@@ -463,7 +463,10 @@ jQuery(document).ready(function($) {
 
 					$form.find( '.notice-wrap' ).remove();
 
-					$form.append( '<div class="notice-wrap"><span class="spinner is-active"></span><div class="affwp-batch-progress"><div></div></div></div>' );
+					// Add the spinner.
+					$( this ).parent().append( '<span class="spinner is-active"></span>' );
+
+					$form.append( '<div class="notice-wrap"><div class="affwp-batch-progress"><div></div></div></div>' );
 
 					response.data.mapping = $form.serialize();
 					response.data.form = $form.serializeAssoc();
