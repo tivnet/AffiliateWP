@@ -124,11 +124,22 @@ function affwp_frontend_scripts_and_styles() {
 		return;
 	}
 
+	$script_deps = array( 'jquery' );
+	$style_deps  = array();
+
+	if ( isset( $_REQUEST['tab'] ) && 'graphs' === sanitize_key( $_REQUEST['tab'] ) ) {
+		$script_deps[] = 'jquery-ui-datepicker';
+		$style_deps[]  = 'jquery-ui-css';
+	}
+
 	$suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
-	wp_register_style( 'affwp-forms', AFFILIATEWP_PLUGIN_URL . 'assets/css/forms' . $suffix . '.css', array(), AFFILIATEWP_VERSION );
+	wp_register_style( 'affwp-forms', AFFILIATEWP_PLUGIN_URL . 'assets/css/forms' . $suffix . '.css', $style_deps, AFFILIATEWP_VERSION );
+
+	wp_register_style( 'jquery-ui-css', AFFILIATEWP_PLUGIN_URL . 'assets/css/jquery-ui-fresh.min.css' );
 
 	wp_register_script( 'affwp-recaptcha', 'https://www.google.com/recaptcha/api.js', array(), AFFILIATEWP_VERSION );
-	wp_register_script( 'affwp-frontend', AFFILIATEWP_PLUGIN_URL . 'assets/js/frontend' . $suffix . '.js', array( 'jquery' ), AFFILIATEWP_VERSION );
+
+	wp_register_script( 'affwp-frontend', AFFILIATEWP_PLUGIN_URL . 'assets/js/frontend' . $suffix . '.js', $script_deps, AFFILIATEWP_VERSION );
 
 	wp_localize_script( 'affwp-frontend', 'affwp_vars', array(
 		'affwp_version'         => AFFILIATEWP_VERSION,

@@ -7,15 +7,6 @@
 class Affiliate_WP_Admin_Notices {
 
 	/**
-	 * Current AffiliateWP version.
-	 *
-	 * @access private
-	 * @since  2.0
-	 * @var    string
-	 */
-	private $version;
-
-	/**
 	 * Constructor.
 	 *
 	 * @since 1.0
@@ -434,8 +425,7 @@ class Affiliate_WP_Admin_Notices {
 	 */
 	public function upgrade_notices() {
 
-		// TODO: switch && to || before final release.
-		if ( version_compare( $this->version, '2.0', '<' ) && ! affwp_has_upgrade_completed( 'upgrade_v20_recount_unpaid_earnings' ) ) :
+		if ( true === version_compare( AFFILIATEWP_VERSION, '2.0', '<' ) || false === affwp_has_upgrade_completed( 'upgrade_v20_recount_unpaid_earnings' ) ) :
 
 			// Enqueue admin JS for the batch processor.
 			affwp_enqueue_admin_js();
@@ -479,11 +469,12 @@ class Affiliate_WP_Admin_Notices {
 					/**
 					 * Fires once a notice has been flagged for dismissal.
 					 *
-					 * @since 1.8
+					 * @since 1.8 as 'affwp_dismiss_notices'
+					 * @since 2.0.4 Renamed to 'affwp_dismiss_notices_default' to avoid a dynamic hook conflict.
 					 *
 					 * @param string $notice Notice value via $_GET['affwp_notice'].
 					 */
-					do_action( 'affwp_dismiss_notices', $notice );
+					do_action( 'affwp_dismiss_notices_default', $notice );
 					break;
 			}
 
