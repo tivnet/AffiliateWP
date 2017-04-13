@@ -124,7 +124,11 @@ abstract class Affiliate_WP_Base {
 
 		$referral_id = affiliate_wp()->referrals->add( $args );
 
-		affiliate_wp()->utils->log( sprintf( 'Pending Referral #%d created successfully', $referral_id ) );
+		if ( $referral_id ) {
+			affiliate_wp()->utils->log( sprintf( 'Pending Referral #%d created successfully.', $referral_id ) );
+		} else {
+			affiliate_wp()->utils->log( 'Pending referral could not be created due to an error.' );
+		}
 
 		return $referral_id;
 
