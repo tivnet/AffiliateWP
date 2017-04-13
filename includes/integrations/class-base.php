@@ -43,7 +43,7 @@ abstract class Affiliate_WP_Base {
 	 */
 	public function __construct() {
 		$this->affiliate_id = affiliate_wp()->tracking->get_affiliate_id();
-
+		$this->debug        = affiliate_wp()->settings->get( 'debug_mode', false );
 		$this->init();
 
 	}
@@ -390,11 +390,7 @@ abstract class Affiliate_WP_Base {
 	 */
 	public function log( $message = '' ) {
 
-		if( $this->debug ) {
-
-			$this->logs->log( $message );
-
-		}
+		affiliate_wp()->utils->log( $message );
 
 	}
 
