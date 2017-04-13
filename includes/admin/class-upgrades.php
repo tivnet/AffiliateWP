@@ -127,7 +127,7 @@ class Affiliate_WP_Upgrades {
 			$this->v195_upgrade();
 		}
 
-		if ( true === version_compare( AFFILIATEWP_VERSION, '2.0', '<' ) && false === affwp_has_upgrade_completed( 'upgrade_v20_recount_unpaid_earnings' ) ) {
+		if ( true === version_compare( AFFILIATEWP_VERSION, '2.0', '<' ) ) {
 			$this->v20_upgrade();
 		}
 
