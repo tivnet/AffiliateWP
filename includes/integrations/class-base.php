@@ -57,9 +57,7 @@ abstract class Affiliate_WP_Base {
 	 * @since   1.0
 	 * @return  void
 	 */
-	public function init() {
-
-	}
+	public function init() {}
 
 	/**
 	 * Determines if the current session was referred through an affiliate link
