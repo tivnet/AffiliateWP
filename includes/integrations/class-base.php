@@ -43,7 +43,7 @@ abstract class Affiliate_WP_Base {
 	 */
 	public function __construct() {
 		$this->affiliate_id = affiliate_wp()->tracking->get_affiliate_id();
-
+		$this->debug        = affiliate_wp()->settings->get( 'debug_mode', false );
 		$this->init();
 
 	}
@@ -124,7 +124,11 @@ abstract class Affiliate_WP_Base {
 
 		$referral_id = affiliate_wp()->referrals->add( $args );
 
-		affiliate_wp()->utils->log( sprintf( 'Pending Referral #%d created successfully', $referral_id ) );
+		if ( $referral_id ) {
+			affiliate_wp()->utils->log( sprintf( 'Pending Referral #%d created successfully.', $referral_id ) );
+		} else {
+			affiliate_wp()->utils->log( 'Pending referral could not be created due to an error.' );
+		}
 
 		return $referral_id;
 
@@ -390,11 +394,7 @@ abstract class Affiliate_WP_Base {
 	 */
 	public function log( $message = '' ) {
 
-		if( $this->debug ) {
-
-			$this->logs->log( $message );
-
-		}
+		affiliate_wp()->utils->log( $message );
 
 	}
 
