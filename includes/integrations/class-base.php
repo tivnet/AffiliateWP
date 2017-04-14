@@ -43,7 +43,7 @@ abstract class Affiliate_WP_Base {
 	 */
 	public function __construct() {
 		// Keep $debug initialization for back-compat.
-		$this->debug = affiliate_wp()->utils->debug_enabled;
+		$this->debug = affiliate_wp()->settings->get( 'debug_mode', false );
 
 		$this->affiliate_id = affiliate_wp()->tracking->get_affiliate_id();
 		$this->init();
