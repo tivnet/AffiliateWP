@@ -79,9 +79,7 @@ class Affiliate_WP_WooCommerce extends Affiliate_WP_Base {
 			// Customers cannot refer themselves
 			if ( $this->is_affiliate_email( $this->order->billing_email, $affiliate_id ) ) {
 
-				if( $this->debug ) {
-					$this->log( 'Referral not created because affiliate\'s own account was used.' );
-				}
+				$this->log( 'Referral not created because affiliate\'s own account was used.' );
 
 				return false;
 			}
@@ -142,9 +140,7 @@ class Affiliate_WP_WooCommerce extends Affiliate_WP_Base {
 
 			if ( 0 == $amount && affiliate_wp()->settings->get( 'ignore_zero_referrals' ) ) {
 
-				if( $this->debug ) {
-					$this->log( 'Referral not created due to 0.00 amount.' );
-				}
+				$this->log( 'Referral not created due to 0.00 amount.' );
 
 				return false; // Ignore a zero amount referral
 			}
@@ -166,9 +162,7 @@ class Affiliate_WP_WooCommerce extends Affiliate_WP_Base {
 					'context'      => $this->context
 				) );
 
-				if( $this->debug ) {
-					$this->log( sprintf( 'WooCommerce Referral #%d updated successfully.', $existing->referral_id ) );
-				}
+				$this->log( sprintf( 'WooCommerce Referral #%d updated successfully.', $existing->referral_id ) );
 
 			} else {
 
@@ -186,9 +180,7 @@ class Affiliate_WP_WooCommerce extends Affiliate_WP_Base {
 
 				if ( $referral_id ) {
 
-					if( $this->debug ) {
-						$this->log( sprintf( 'Referral #%d created successfully.', $referral_id ) );
-					}
+					$this->log( sprintf( 'Referral #%d created successfully.', $referral_id ) );
 
 					$amount = affwp_currency_filter( affwp_format_amount( $amount ) );
 					$name   = affiliate_wp()->affiliates->get_affiliate_name( $affiliate_id );
@@ -197,9 +189,7 @@ class Affiliate_WP_WooCommerce extends Affiliate_WP_Base {
 
 				} else {
 
-					if( $this->debug ) {
-						$this->log( 'Referral failed to be created.' );
-					}
+					$this->log( 'Referral failed to be created.' );
 
 				}
 			}
