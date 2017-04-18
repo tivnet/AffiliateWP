@@ -472,13 +472,13 @@ jQuery(document).ready(function($) {
 							tableRow = field.parent().parent();
 
 							// Remove the validation class if this is a repeat click.
-							tableRow.removeClass( 'required-import-field' );
+							tableRow.removeClass( 'affwp-required-import-field' );
 
 							// If nothing is mapped, trigger validation.
 							if ( field.val() == '' ) {
 								triggerValidation = true;
 
-								tableRow.addClass( 'required-import-field' );
+								tableRow.addClass( 'affwp-required-import-field' );
 								// preview.text( validation message );
 							}
 						} );
