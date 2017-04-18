@@ -454,6 +454,42 @@ jQuery(document).ready(function($) {
 
 					event.preventDefault();
 
+					// Validate for required fields.
+					if ( $form.data( 'required' ) ) {
+						var	required = $form.data( 'required' ),
+							requiredFields = [];
+
+						if ( required.indexOf( ',' ) ) {
+							requiredFields = required.split( ',' );
+						} else {
+							requiredFields = [ required ];
+						}
+
+						var triggerValidation = false;
+
+						$.each( requiredFields, function( key, value ) {
+							field    = $( "select[name='affwp-import-field[" + value + "]']" );
+							tableRow = field.parent().parent();
+
+							// Remove the validation class if this is a repeat click.
+							tableRow.removeClass( 'required-import-field' );
+
+							// If nothing is mapped, trigger validation.
+							if ( field.val() == '' ) {
+								triggerValidation = true;
+
+								tableRow.addClass( 'required-import-field' );
+								// preview.text( validation message );
+							}
+						} );
+
+						// If validation has been triggered, bail from submitting the form.
+						if ( triggerValidation ) {
+							return;
+						}
+
+					}
+
 					$form.find( '.notice-wrap' ).remove();
 
 					// Add the spinner.
