@@ -479,7 +479,7 @@ jQuery(document).ready(function($) {
 								triggerValidation = true;
 
 								tableRow.addClass( 'affwp-required-import-field' );
-								// preview.text( validation message );
+								field.parent().next().html( affwp_vars.import_field_required );
 							}
 						} );
 
