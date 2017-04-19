@@ -34,10 +34,22 @@ if( $affiliate_wp_settings->get( 'uninstall_on_delete' ) ) {
 	$caps = new Affiliate_WP_Capabilities;
 	$caps->remove_caps();
 
-	if ( true === version_compare( $GLOBALS['wp_version'], '4.6', '<' ) ) {
-		$sites = wp_list_pluck( 'blog_id', wp_get_sites() );
+	if ( defined( 'AFFILIATE_WP_NETWORK_WIDE' ) && AFFILIATE_WP_NETWORK_WIDE ) {
+
+		$sites = array( 1 );
+
 	} else {
-		$sites = get_sites( array( 'fields' => 'ids' ) );
+
+		if ( true === version_compare( $GLOBALS['wp_version'], '4.6', '<' ) ) {
+
+			$sites = wp_list_pluck( 'blog_id', wp_get_sites() );
+
+		} else {
+
+			$sites = get_sites( array( 'fields' => 'ids' ) );
+
+		}
+
 	}
 
 	// Remove all database tables
