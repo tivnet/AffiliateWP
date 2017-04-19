@@ -34,14 +34,28 @@ if( $affiliate_wp_settings->get( 'uninstall_on_delete' ) ) {
 	$caps = new Affiliate_WP_Capabilities;
 	$caps->remove_caps();
 
+	if ( true === version_compare( $GLOBALS['wp_version'], '4.6', '<' ) ) {
+		$sites = wp_list_pluck( 'blog_id', wp_get_sites() );
+	} else {
+		$sites = get_sites( array( 'fields' => 'ids' ) );
+	}
+
 	// Remove all database tables
-	$wpdb->query( "DROP TABLE IF EXISTS " . $wpdb->prefix . "affiliate_wp_affiliates" );
-	$wpdb->query( "DROP TABLE IF EXISTS " . $wpdb->prefix . "affiliate_wp_affiliatemeta" );
-	$wpdb->query( "DROP TABLE IF EXISTS " . $wpdb->prefix . "affiliate_wp_creatives" );
-	$wpdb->query( "DROP TABLE IF EXISTS " . $wpdb->prefix . "affiliate_wp_payouts" );
-	$wpdb->query( "DROP TABLE IF EXISTS " . $wpdb->prefix . "affiliate_wp_referrals" );
-	$wpdb->query( "DROP TABLE IF EXISTS " . $wpdb->prefix . "affiliate_wp_rest_consumers" );
-	$wpdb->query( "DROP TABLE IF EXISTS " . $wpdb->prefix . "affiliate_wp_visits" );
-	$wpdb->query( "DROP VIEW " . $wpdb->prefix . "affiliate_wp_campaigns" );
+	foreach ( $sites as $site_id ) {
+
+		switch_to_blog( $site_id );
+
+		$wpdb->query( "DROP TABLE IF EXISTS " . $wpdb->prefix . "affiliate_wp_affiliates" );
+		$wpdb->query( "DROP TABLE IF EXISTS " . $wpdb->prefix . "affiliate_wp_affiliatemeta" );
+		$wpdb->query( "DROP TABLE IF EXISTS " . $wpdb->prefix . "affiliate_wp_creatives" );
+		$wpdb->query( "DROP TABLE IF EXISTS " . $wpdb->prefix . "affiliate_wp_payouts" );
+		$wpdb->query( "DROP TABLE IF EXISTS " . $wpdb->prefix . "affiliate_wp_referrals" );
+		$wpdb->query( "DROP TABLE IF EXISTS " . $wpdb->prefix . "affiliate_wp_rest_consumers" );
+		$wpdb->query( "DROP TABLE IF EXISTS " . $wpdb->prefix . "affiliate_wp_visits" );
+		$wpdb->query( "DROP VIEW " . $wpdb->prefix . "affiliate_wp_campaigns" );
+
+		restore_current_blog();
+
+	}
 
 }
