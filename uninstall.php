@@ -52,18 +52,30 @@ if( $affiliate_wp_settings->get( 'uninstall_on_delete' ) ) {
 
 	}
 
+	$db_segments = array(
+		'affiliate_wp_affiliates',
+		'affiliate_wp_affiliatemeta',
+		'affiliate_wp_campaigns',
+		'affiliate_wp_creatives',
+		'affiliate_wp_payouts',
+		'affiliate_wp_referrals',
+		'affiliate_wp_rest_consumers',
+		'affiliate_wp_visits'
+	);
+
 	// Remove all database tables
 	foreach ( $sites as $site_id ) {
 
 		switch_to_blog( $site_id );
 
-		$wpdb->query( "DROP TABLE IF EXISTS " . $wpdb->prefix . "affiliate_wp_affiliates" );
-		$wpdb->query( "DROP TABLE IF EXISTS " . $wpdb->prefix . "affiliate_wp_affiliatemeta" );
-		$wpdb->query( "DROP TABLE IF EXISTS " . $wpdb->prefix . "affiliate_wp_creatives" );
-		$wpdb->query( "DROP TABLE IF EXISTS " . $wpdb->prefix . "affiliate_wp_payouts" );
-		$wpdb->query( "DROP TABLE IF EXISTS " . $wpdb->prefix . "affiliate_wp_referrals" );
-		$wpdb->query( "DROP TABLE IF EXISTS " . $wpdb->prefix . "affiliate_wp_rest_consumers" );
-		$wpdb->query( "DROP TABLE IF EXISTS " . $wpdb->prefix . "affiliate_wp_visits" );
+		foreach ( $db_segments as $segment ) {
+			// Table.
+			$wpdb->query( "DROP TABLE IF EXISTS " . $wpdb->prefix . $segment );
+
+			// Options.
+			$wpdb->query( "DELETE FROM $wpdb->options WHERE option_name LIKE '%$segment%'" );
+		}
+
 		$wpdb->query( "DROP VIEW " . $wpdb->prefix . "affiliate_wp_campaigns" );
 
 		restore_current_blog();
