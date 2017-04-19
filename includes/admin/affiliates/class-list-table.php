@@ -718,7 +718,11 @@ class AffWP_Affiliates_Table extends List_Table {
 			'order'   => sanitize_text_field( $order )
 		) );
 
-		$affiliates   = affiliate_wp()->affiliates->get_affiliates( $args );
+		$affiliates = affiliate_wp()->affiliates->get_affiliates( $args );
+
+		// Retrieve the "current" total count for pagination purposes.
+		$args['number']      = -1;
+		$this->current_count = affiliate_wp()->affiliates->count( $args );
 
 		return $affiliates;
 	}
@@ -769,17 +773,16 @@ class AffWP_Affiliates_Table extends List_Table {
 				$total_items = $this->rejected_count;
 				break;
 			case 'any':
-				$total_items = $this->total_count;
+				$total_items = $this->current_count;
 				break;
 		}
 
 		$this->items = $data;
 
 		$this->set_pagination_args( array(
-				'total_items' => $total_items,
-				'per_page'    => $per_page,
-				'total_pages' => ceil( $total_items / $per_page )
-			)
-		);
+			'total_items' => $total_items,
+			'per_page'    => $per_page,
+			'total_pages' => ceil( $total_items / $per_page )
+		) );
 	}
 }
