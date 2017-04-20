@@ -24,12 +24,6 @@ if( $affiliate_wp_settings->get( 'uninstall_on_delete' ) ) {
 	// Remove the affiliate area page
 	wp_delete_post( $affiliate_wp_settings->get( 'affiliates_page' ) );
 
-	// Remove all plugin settings.
-	delete_option( 'affwp_settings' );
-
-	// Remove other options.
-	$wpdb->query( "DELETE FROM $wpdb->options WHERE option_name LIKE 'affwp\_%';" );
-
 	// Remove all capabilities and roles
 	$caps = new Affiliate_WP_Capabilities;
 	$caps->remove_caps();
@@ -67,6 +61,9 @@ if( $affiliate_wp_settings->get( 'uninstall_on_delete' ) ) {
 	foreach ( $sites as $site_id ) {
 
 		switch_to_blog( $site_id );
+
+		// Remove all affwp_ options.
+		$wpdb->query( "DELETE FROM $wpdb->options WHERE option_name LIKE 'affwp\_%';" );
 
 		foreach ( $db_segments as $segment ) {
 			// Table.
