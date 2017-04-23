@@ -240,6 +240,29 @@ class Affiliate_WP_Upgrades {
 	}
 
 	/**
+	 * Determines whether an upgrade has expired, i.e. was tied to a specific version that has passed.
+	 *
+	 * @access public
+	 * @since  2.1
+	 *
+	 * @param string $upgrade_id Upgrade ID.
+	 * @return bool True if the upgrade has expired, otherwise false.
+	 */
+	public function expired( $upgrade_id ) {
+		$upgrade = $this->registry->get( $upgrade_id );
+
+		if ( $upgrade && ! empty( $upgrade['version'] ) ) {
+
+			if ( true === version_compare( AFFILIATEWP_VERSION, $upgrade['version'], '>' ) ) {
+				return true;
+			}
+
+		}
+
+		return false;
+	}
+
+	/**
 	 * Writes a log message.
 	 *
 	 * @access private

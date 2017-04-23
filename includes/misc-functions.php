@@ -1014,6 +1014,10 @@ function affwp_set_upgrade_complete( $upgrade_action ) {
  */
 function affwp_has_upgrade_completed( $upgrade_action ) {
 
+	if ( affiliate_wp()->utils->upgrades->expired( $upgrade_action ) ) {
+		affwp_set_upgrade_complete( $upgrade_action );
+	}
+
 	$completed_upgrades = affwp_get_completed_upgrades();
 
 	return in_array( $upgrade_action, $completed_upgrades, true );
