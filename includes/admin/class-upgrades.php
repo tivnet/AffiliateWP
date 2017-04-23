@@ -158,8 +158,6 @@ class Affiliate_WP_Upgrades {
 	 */
 	private function register_core_upgrades() {
 		$this->add_routine( 'upgrade_v20_recount_unpaid_earnings', array(
-			'version' => '2.0',
-			'compare' => '<',
 			'batch_process' => array(
 				'id'    => 'recount-affiliate-stats-upgrade',
 				'class' => 'AffWP\Utils\Batch_Process\Upgrade_Recount_Stats',
