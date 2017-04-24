@@ -77,7 +77,7 @@ class Affiliate_WP_WooCommerce extends Affiliate_WP_Base {
 			}
 
 			// Customers cannot refer themselves
-			if ( $this->is_affiliate_email( $this->order->billing_email, $affiliate_id ) ) {
+			if ( $this->is_affiliate_email( $this->order->get_billing_email(), $affiliate_id ) ) {
 
 				if( $this->debug ) {
 					$this->log( 'Referral not created because affiliate\'s own account was used.' );
@@ -280,7 +280,7 @@ class Affiliate_WP_WooCommerce extends Affiliate_WP_Base {
 		$this->order = apply_filters( 'affwp_get_woocommerce_order', new WC_Order( $order_id ) );
 
 		// If the WC status is 'wc-processing' and a COD order, leave as 'pending'.
-		if ( 'wc-processing' == $this->order->post_status && 'cod' === get_post_meta( $order_id, '_payment_method', true ) ) {
+		if ( 'wc-processing' == $this->order->get_status() && 'cod' === $this->order->get_payment_method() ) {
 			return;
 		}
 
@@ -407,7 +407,7 @@ class Affiliate_WP_WooCommerce extends Affiliate_WP_Base {
 		foreach ( $coupons as $code ) {
 
 			$coupon       = new WC_Coupon( $code );
-			$affiliate_id = get_post_meta( $coupon->id, 'affwp_discount_affiliate', true );
+			$affiliate_id = get_post_meta( $coupon->get_id(), 'affwp_discount_affiliate', true );
 
 			if ( $affiliate_id ) {
 
